@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
+
 const bcrypt = require("bcryptjs")
 const jwt = require('jsonwebtoken')
 const {JWT_SECRET} = require('../keys')
@@ -21,6 +22,18 @@ router.post('/signup',(req,res)=>{
         if(savedUser){
             return res.status(422).json({error:"username taken"})
         }
+        const user = new User({
+            username,
+            email,
+            password
+        })
+
+        user.save().then(user=>{
+            res.json({message:"saved user successfully"})
+        })
+        .catch(err=>{
+            console.log(err)
+        })
         bcrypt.hash(password)
         .then(hashedpassword=>{
             const user = new User({
@@ -36,7 +49,6 @@ router.post('/signup',(req,res)=>{
                 console.log(err)
             })
         })
-
     })
     .catch(err=>{
         console.log(err)
@@ -69,5 +81,6 @@ router.post('/signin',(req,res)=>{
         })
     })
 })
+
 
 module.exports = router
