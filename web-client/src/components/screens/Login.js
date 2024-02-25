@@ -2,7 +2,13 @@ import React from 'react'
 
 const Login = ()=>{
     return(
-        <h1>Login</h1>
+        <div className='card'>
+            <div className="card auth">
+                <input type="text" placeholder='Email'/>
+                <input type="text" placeholder='Password'/>
+                <button>Login</button>
+            </div>
+        </div>
     )
 }
 
