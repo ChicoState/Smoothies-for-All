@@ -34,3 +34,10 @@ a{
     font-size: 1rem;
     color: blue; /* Example color */
 }
+
+
+.home-card{
+    margin: auto;
+    max-width: 600px;
+    max-height: max-content;
+}
