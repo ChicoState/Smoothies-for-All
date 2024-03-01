@@ -9,7 +9,7 @@ const {JWT_SECRET} = require('../keys')
 const requireLogin = require('../middleware/requireLogin')
 
 
-router.get('/',requireLogin,(req,res)=>{
+router.get('/',(req,res)=>{
     res.send("hello")
 })
 
