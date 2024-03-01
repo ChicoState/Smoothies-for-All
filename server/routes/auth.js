@@ -22,18 +22,6 @@ router.post('/signup',(req,res)=>{
         if(savedUser){
             return res.status(422).json({error:"username taken"})
         }
-        const user = new User({
-            username,
-            email,
-            password
-        })
-
-        user.save().then(user=>{
-            res.json({message:"saved user successfully"})
-        })
-        .catch(err=>{
-            console.log(err)
-        })
         bcrypt.hash(password,8)
         .then(hashedpassword=>{
             const user = new User({
