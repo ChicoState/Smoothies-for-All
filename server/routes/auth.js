@@ -9,7 +9,7 @@ const {JWT_SECRET} = require('../keys')
 const requireLogin = require('../middleware/requireLogin')
 
 
-router.get('/',requireLogin,(req,res)=>{
+router.get('/',(req,res)=>{
     res.send("hello")
 })
 
@@ -22,19 +22,7 @@ router.post('/signup',(req,res)=>{
         if(savedUser){
             return res.status(422).json({error:"username taken"})
         }
-        const user = new User({
-            username,
-            email,
-            password
-        })
-
-        user.save().then(user=>{
-            res.json({message:"saved user successfully"})
-        })
-        .catch(err=>{
-            console.log(err)
-        })
-        bcrypt.hash(password)
+        bcrypt.hash(password,8)
         .then(hashedpassword=>{
             const user = new User({
                 username,
@@ -70,7 +58,8 @@ router.post('/signin',(req,res)=>{
             if(correctPassword){
                 res.json({message:"successful signin"})
                 const token = jwt.sign({_id:savedUser._id},JWT_SECRET)
-                res.json({token})
+                const {_id,username,email} = savedUser
+                res.json({token,user:{_id,username,email}})
             }
             else{
                 return res.status(422).json({error:"invalid username or password"})
