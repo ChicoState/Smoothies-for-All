@@ -5,8 +5,8 @@ const SideNavbar = ()=> {
     return (
         <nav className="side-nav">
             <div className='side-content'>
-            <i className="material-icons" style={{ fontSize: '50px' }}>home</i>
-            <i className="material-icons" style={{ fontSize: '50px' }}>bookmark</i>
+            <Link to="/" className="material-icons" style={{ fontSize: '50px' }}>home</Link>
+            <Link to="/" className="material-icons" style={{ fontSize: '50px' }}>bookmark</Link>
             </div>
         </nav>
     );
