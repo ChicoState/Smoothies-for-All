@@ -6,6 +6,7 @@ import Signup from './components/screens/Signup';
 import Login from './components/screens/Login';
 import NavBar from './components/Navbar'; // Navbar
 import "./App.css"; // CSS
+import SideNavbar from './components/SideNavbar';
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
     <>
       <BrowserRouter>
         <NavBar /> {/* Nav bar */}
+        <SideNavbar />  
         <Routes>
           <Route path="/" element={<Home />} /> 
           <Route path="/login" element={<Login />} />
