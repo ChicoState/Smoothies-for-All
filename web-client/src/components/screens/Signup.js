@@ -26,7 +26,7 @@ const Signup = ()=>{
             }
             else{
                 M.toast({html:data.message})
-                Navigate('/signin')
+                navigate('/Login')
             }
         }).catch(err=>{
             console.log(err)
