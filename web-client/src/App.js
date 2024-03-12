@@ -5,6 +5,7 @@ import Profile from './components/screens/Profile';
 import Signup from './components/screens/Signup';
 import Login from './components/screens/Login';
 import CreatePost from './components/screens/CreatePost';
+import Saved from './components/screens/Saved';
 import NavBar from './components/Navbar'; // Navbar
 import "./App.css"; // CSS
 
@@ -20,6 +21,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/create" element={<CreatePost />} />
+          <Route path="/saved" element={<Saved />} />
         </Routes>
       </BrowserRouter>
     </>

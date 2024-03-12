@@ -19,7 +19,8 @@ const Signup = ()=>{
                 email,
                 password
             })
-        }).then(res=>res.json())
+        })
+        .then(res=>res.json())
         .then(data=>{
             if(data.error){
                 M.toast({html:data.error})
