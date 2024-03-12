@@ -38,15 +38,7 @@ const CreatePost = ()=>{
                 pic:url
             })
         })
-        .then(res => {
-            if (res.ok) {
-                return res.json();
-            } else {
-                // Handle error response here
-                console.error("Error response:", res);
-                throw new Error("Failed to fetch data");
-            }
-        })
+        .then(res=>res.json())
         .then(data=>{
             if(data.error){
                 M.toast({html:data.error})
