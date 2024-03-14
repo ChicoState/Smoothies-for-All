@@ -1,6 +1,7 @@
-import React,{useState} from "react";
+import React,{useState, useEffect} from "react";
 import M from 'materialize-css';
 import {useNavigate} from 'react-router-dom';
+
 
 const CreatePost = ()=>{
     const navigate = useNavigate()
@@ -9,6 +10,45 @@ const CreatePost = ()=>{
     const [image, setImage] = useState("")
     const [url, setUrl] = useState("")
 
+    useEffect(() => {
+        if (url) {
+            fetch('/create',{
+                method:"post",
+                headers:{
+                    'Content-Type':"application/json",
+                    'Authorization':"Bearer "+localStorage.getItem("jwt")
+                },
+    
+                body:JSON.stringify({
+                    title,
+                    body,
+                    photo:url
+                })
+            })
+            .then(res => {
+                if (res.ok) {
+                    return res.json();
+                } else {
+                    // Handle error response here
+                    console.error("Error response:", res);
+                }
+            })
+            .then(data=>{
+                if(data.error){
+                    M.toast({html:data.error})
+                }
+                else{
+                    data.message ? M.toast({ html: data.message }) : console.error("No message received from the server");
+
+                    navigate('/')
+                }
+            }).catch(err=>{
+                console.log(err)
+            })
+        }
+    
+    }, [url])
+    
     const postDetails = ()=> {
         const data = new FormData()
         data.append("file",image)
@@ -19,45 +59,16 @@ const CreatePost = ()=>{
             body:data
         })
         .then(res=>res.json())
-        .then(data=>{
+        .then (data=>{
             setUrl(data.url)
         })
         .catch(err=>{
             console.log(err)
         })
-        
+
         //fetching data from our backend
-        fetch('/create',{
-            method:"post",
-            headers:{
-                'Content-Type':"application/json"
-            },
-            body:JSON.stringify({
-                title,
-                body,
-                pic:url
-            })
-        })
-        .then(res => {
-            if (res.ok) {
-                return res.json();
-            } else {
-                // Handle error response here
-                console.error("Error response:", res);
-                throw new Error("Failed to fetch data");
-            }
-        })
-        .then(data=>{
-            if(data.error){
-                M.toast({html:data.error})
-            }
-            else{
-                M.toast({html:data.message})
-                navigate('/')
-            }
-        }).catch(err=>{
-            console.log(err)
-        })
+
+
     }
 
     return(

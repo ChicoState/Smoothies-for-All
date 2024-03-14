@@ -20,4 +20,4 @@ const postSchema = new mongoose.Schema({
     }
 })
 
-mongoose.model("post",postSchema)
+mongoose.model("Post",postSchema)

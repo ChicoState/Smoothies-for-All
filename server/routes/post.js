@@ -16,16 +16,16 @@ router.get('/allposts',(req,res)=>{
 })
 
 
-router.post('/create',requireLogin, (req,res)=>{
-    const {title,body,pic} = req.body
-    if(!title || !body || !pic){
+router.post('/create', requireLogin, (req,res)=>{
+    const {title,body,photo} = req.body
+    if(!title || !body || !photo){
         res.status(422).json({error:"Please add all the fields"})
     }
-    req.user.password = undefined
+    //req.user.password = undefined
     const post = new Post({
         title,
         body,
-        photo:pic,
+        photo,
         postedBy:req.user
     })
     post.save().then(result=>{

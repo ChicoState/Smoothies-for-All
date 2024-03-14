@@ -6,6 +6,7 @@ const Login = () =>{
     const navigate = useNavigate()
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
+    
     const PostData = ()=>{
         fetch("/signin",{
             method:"post",
@@ -22,7 +23,9 @@ const Login = () =>{
                 M.toast({html:data.error})
             }
             else{
-                M.toast({html:data.message})
+                localStorage.setItem("jwt", data.token)
+                localStorage.setItem("user", data.user)
+                data.message ? M.toast({ html: data.message }) : console.error("No message received from the server");
                 navigate('/')
             }
         }).catch(err=>{
