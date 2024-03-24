@@ -1,8 +1,10 @@
-import React,{useState} from 'react'
+import React,{useState,useContext} from 'react'
 import { Link,Navigate,useNavigate } from 'react-router-dom'
+import {UserContext} from '../../App'
 import M from 'materialize-css'
 
 const Login = () =>{
+    const {state,dispatch} = useContext(UserContext)
     const navigate = useNavigate()
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
@@ -25,6 +27,7 @@ const Login = () =>{
             else{
                 localStorage.setItem("jwt", data.token)
                 localStorage.setItem("user", data.user)
+                dispatch({type:"USER", payload:data.user})
                 data.message ? M.toast({ html: data.message }) : console.error("No message received from the server");
                 navigate('/')
             }
