@@ -1,29 +1,68 @@
-import React from 'react'
+import React, { useRef, useState, useEffect } from 'react';
+import { useQueryClient, useQuery } from '@tanstack/react-query';
+import { DateTime } from 'luxon';
 
-const Home = ()=>{
-    return(
-        <div className='home'>
-            <div className='card home-card'>
-                <h5>Username</h5>
-                <div className='card-image'>
-                    <img src='https://plus.unsplash.com/premium_photo-1681826664053-5f50e4a0c513?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8c21vb3RoaWVzfGVufDB8fDB8fHww'/>
-                </div>
-                <div className='card-content'>
-                <i class="material-icons">favorite_border</i>
-                <i class="material-icons">bookmark_border</i>
-                    <div style={{display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
-                        <h6>Username</h6> 
-                        <h6>MM/DD/YYYY</h6>
-                        
-                    </div>              
-                    <p>This is the caption...</p>
-                    <input type="text" placeholder='Add comment'/>
-                </div>
+function Home() {
+  // ** States
+  const [filteredPosts, setFilteredPosts] = useState([]);
+
+  // ** Hooks
+  const query = useQuery({
+    queryKey: 'posts',
+    queryFn: () => fetch('http://localhost:6969/allposts').then(res => res.json())
+  });
+  const searchRef = useRef(null);
+
+  // ** Functions
+  const handleSearch = () => {
+    const search = searchRef.current.value;
+
+    console.log('search', search);
+
+    if (!search) {
+      setFilteredPosts(query.data.posts);
+
+      return;
+    }
+
+    const filtered = query.data.posts.filter(post => post.body.includes(search) || post.title.includes(search));
+
+    console.log('filtered', filtered);
+
+    setFilteredPosts(filtered);
+  };
+
+  useEffect(() => {
+    if (query.isSuccess) {
+      setFilteredPosts(query.data.posts);
+    }
+  }, [query.data]);
+
+  return (
+    <div className='home'>
+      <input type='text' placeholder='Search' className='search' ref={searchRef} onChange={handleSearch} />
+      {query.isLoading && <h1>Loading...</h1>}
+      {query.isError && <h1>Error...</h1>}
+      {query.isSuccess &&
+        filteredPosts.map(post => (
+          <div className='card home-card'>
+            <div className='card-image'>
+              <img src={post.photo} />
             </div>
-        </div>
-
-    )
+            <div className='card-content'>
+              <i className='material-icons'>favorite_border</i>
+              <i className='material-icons'>bookmark_border</i>
+              <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                <h6>{post.postedBy.username}</h6>
+                <h6>{DateTime.fromISO(post.createdAt).toLocaleString(DateTime.DATETIME_MED)}</h6>
+              </div>
+              <p>{post.body}</p>
+              <input type='text' placeholder='Add comment' />
+            </div>
+          </div>
+        ))}
+    </div>
+  );
 }
 
-
-export default Home
+export default Home;

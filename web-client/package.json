@@ -2,12 +2,20 @@
   "name": "web-client",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:6969",
+  "options": {
+    "proxy": "http://localhost:6969",
+    "allowedHosts": [
+      "localhost"
+    ]
+  },
   "dependencies": {
+    "@tanstack/react-query": "^5.28.8",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "luxon": "^3.4.4",
     "materialize-css": "^1.0.0-rc.2",
+    "prettier": "^3.2.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.1",
@@ -18,13 +26,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "eject": "react-scripts eject",
+    "format": "prettier --write src/**/*.{js,jsx,ts,tsx,json,css,scss,md}"
   },
   "browserslist": {
     "production": [
@@ -37,5 +40,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
   }
 }
