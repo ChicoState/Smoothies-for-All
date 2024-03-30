@@ -22,17 +22,10 @@ const CreatePost = ()=>{
                 body:JSON.stringify({
                     title,
                     body,
-                    photo:url
+                    photo:url,
                 })
             })
-            .then(res => {
-                if (res.ok) {
-                    return res.json();
-                } else {
-                    // Handle error response here
-                    console.error("Error response:", res);
-                }
-            })
+            .then(res => res.json())
             .then(data=>{
                 if(data.error){
                     M.toast({html:data.error})
@@ -65,9 +58,6 @@ const CreatePost = ()=>{
         .catch(err=>{
             console.log(err)
         })
-
-        //fetching data from our backend
-
 
     }
 

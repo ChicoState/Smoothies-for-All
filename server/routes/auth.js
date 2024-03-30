@@ -58,8 +58,8 @@ router.post('/signin',(req,res)=>{
             if(correctPassword){
                 //res.json({message:"successful signin"})
                 const token = jwt.sign({_id:savedUser._id},JWT_SECRET)
-                const {_id,username,email} = savedUser
-                res.json({token,user:{_id,username,email}})
+                const {_id,username,email,saved} = savedUser
+                res.json({token,user:{_id,username,email,saved}})
             }
             else{
                 return res.status(422).json({error:"invalid username or password"})
@@ -71,5 +71,40 @@ router.post('/signin',(req,res)=>{
     })
 })
 
+router.put('/saved', requireLogin, (req,res)=>{
+    User.findByIdAndUpdate(req.user._id, {
+        $push:{saved:req.body.postId}
+    },
+    {
+        new:true
+    }).then((result)=> {
+        res.json({
+            _id: result._id,
+            username: result.username,
+            email: result.email,
+            saved: result.saved
+        });
+    }).catch((err)=> {
+        return res.status(422).json({error:err})
+    }) 
+})
+
+router.put('/unsave', requireLogin, (req,res)=>{
+    User.findByIdAndUpdate(req.user._id, {
+        $pull:{saved:req.body.postId}
+    },
+    {
+        new:true
+    }).then((result)=> {
+        res.json({
+            _id: result._id,
+            username: result.username,
+            email: result.email,
+            saved: result.saved
+        });
+    }).catch((err)=> {
+        return res.status(422).json({error:err})
+    }) 
+})
 
 module.exports = router
