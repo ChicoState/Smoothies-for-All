@@ -1,3 +1,4 @@
+const { ObjectId } = require('bson')
 const mongoose = require('mongoose')
 
 const userSchema = new mongoose.Schema({
@@ -12,7 +13,12 @@ const userSchema = new mongoose.Schema({
     password:{
         type:String,
         required:true
-    }
+    },
+    saved:[{
+        type:ObjectId,
+        ref:"Post"
+    }]
+
 })
 
 mongoose.model("User",userSchema)
