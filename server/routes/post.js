@@ -37,16 +37,17 @@ router.post('/create', requireLogin, (req,res)=>{
     })
 })
 
-router.get('/myposts',(req,res)=>{
+router.get('/mypost', requireLogin, (req,res) => {
     Post.find({postedBy:req.user._id})
-    .populate("PostedBy", "_id username")
-    .then(myPost=>{
-        res.json({myPost})
+    .populate("postedBy", "_id username")
+    .then(myPost => {
+        res.json({ mypost: myPost });
     })
-    .catch(err=>{
-        console.log(err)
+    .catch(err => {
+        console.log(err);
     })
 })
+
 
 //update operation
 router.put('/like', requireLogin, (req,res)=>{
@@ -93,5 +94,6 @@ router.put('/comment', requireLogin, (req,res)=>{
         return res.status(422).json({error:err})
     }) 
 })
+
 
 module.exports = router
