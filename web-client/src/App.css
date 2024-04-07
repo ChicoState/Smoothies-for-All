@@ -42,3 +42,12 @@ a{
     max-height: max-content;
 }
 
+.gallery{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.item{
+    width: 30%;
+}
