@@ -9,6 +9,8 @@ const CreatePost = ()=>{
     const [body, setBody] = useState("")
     const [image, setImage] = useState("")
     const [url, setUrl] = useState("")
+    const [ingredients, setIngredients] = useState("")
+    let ingredient = null;
 
     useEffect(() => {
         if (url) {
@@ -22,6 +24,7 @@ const CreatePost = ()=>{
                 body:JSON.stringify({
                     title,
                     body,
+                    ingredient,
                     photo:url,
                 })
             })
@@ -76,12 +79,26 @@ const CreatePost = ()=>{
                 value={title}
                 onChange={(e)=>setTitle(e.target.value)}
             />
-            <input 
+            {/* <input 
                 type="text"
                 placeholder="body"   
                 value={body}
                 onChange={(e)=>setBody(e.target.value)}
-            />
+            /> */}
+            <form>
+                <textarea 
+                placeholder="body"   
+                value={body}
+                onChange={(e)=>setBody(e.target.value)}
+                />
+            </form>
+            <form>
+                <textarea 
+                placeholder="ingredients"   
+                value={ingredients}
+                onChange={(e)=>setIngredients(e.target.value)}
+                />
+            </form>
             <div className="file-field input-field">
                 <div className="btn">
                     <span>Upload Image</span>
@@ -92,7 +109,11 @@ const CreatePost = ()=>{
                 </div>
             </div>
             <button className="btn waves-effect waves-light" 
-                    onClick={()=>postDetails()}
+                    onClick={()=>{
+                        postDetails()
+                        ingredient = ingredients.split(",");
+                        console.log(ingredient); // ["Hello,", "World!"]
+                    }}
             >
                     CreatePost
             </button>

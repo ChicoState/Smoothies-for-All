@@ -201,7 +201,10 @@ const Home = ()=>{
                             <h6>{item.likes.length} Likes</h6>  
                             <h6>{item.title}</h6>          
                             <p>{item.body}</p>
-                            {
+                            
+                            <details>
+                                <summary>Comments ({item.comments.length})</summary>
+                                {
                                 item.comments.map(record=>{
                                     return(
                                         <h6 key={record._id}>
@@ -211,6 +214,7 @@ const Home = ()=>{
                                     )
                                 })
                             }
+                            </details>                            
                             <form onSubmit={(e)=>{
                                 e.preventDefault()
                                 makeComment(e.target[0].value, item._id)
