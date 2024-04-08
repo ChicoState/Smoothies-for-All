@@ -42,3 +42,7 @@ a{
     max-height: max-content;
 }
 
+.home-card i:nth-child(2){
+    position: absolute;
+    right: 30px;
+}
