@@ -175,7 +175,7 @@ const Home = ()=>{
                            </div>
                            <div className='card-content'>
                             
-                            {console.log(state)}
+                            {console.log(item)}
                             {item.likes.includes(state._id)
                             ?   <i class="material-icons" style={{color:'red'}}
                                 onClick={()=>{unlikePost(item._id)}}
@@ -201,7 +201,16 @@ const Home = ()=>{
                             <h6>{item.likes.length} Likes</h6>  
                             <h6>{item.title}</h6>          
                             <p>{item.body}</p>
-                            
+                            {/* <details>
+                                <summary>Ingredients</summary>
+                                {
+                                item.ingredient.map(record=>{
+                                    return(
+                                        <h6> {record.text} </h6>
+                                    )
+                                })
+                            }
+                            </details>   */}
                             <details>
                                 <summary>Comments ({item.comments.length})</summary>
                                 {
@@ -214,7 +223,8 @@ const Home = ()=>{
                                     )
                                 })
                             }
-                            </details>                            
+                            </details>    
+                                                    
                             <form onSubmit={(e)=>{
                                 e.preventDefault()
                                 makeComment(e.target[0].value, item._id)

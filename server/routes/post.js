@@ -18,7 +18,7 @@ router.get('/allposts',requireLogin,(req,res)=>{
 
 
 router.post('/create', requireLogin, (req,res)=>{
-    const {title,body,photo, ingredient} = req.body
+    const {title,body,ingredient, photo,} = req.body
     if(!title || !body || !photo){
         res.status(422).json({error:"Please add all the fields"})
     }

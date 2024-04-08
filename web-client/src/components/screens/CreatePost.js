@@ -10,9 +10,11 @@ const CreatePost = ()=>{
     const [image, setImage] = useState("")
     const [url, setUrl] = useState("")
     const [ingredients, setIngredients] = useState("")
-    let ingredient = null;
+    let ingredient = ingredients.split(",");
+    ingredient = JSON.stringify(ingredient)
 
     useEffect(() => {
+        {console.log(ingredient)}
         if (url) {
             fetch('/create',{
                 method:"post",
@@ -24,8 +26,8 @@ const CreatePost = ()=>{
                 body:JSON.stringify({
                     title,
                     body,
-                    ingredient,
                     photo:url,
+                    ingredient,
                 })
             })
             .then(res => res.json())
@@ -96,7 +98,9 @@ const CreatePost = ()=>{
                 <textarea 
                 placeholder="ingredients"   
                 value={ingredients}
-                onChange={(e)=>setIngredients(e.target.value)}
+                onChange={(e)=>{
+                    setIngredients(e.target.value)
+                }}
                 />
             </form>
             <div className="file-field input-field">
@@ -110,9 +114,9 @@ const CreatePost = ()=>{
             </div>
             <button className="btn waves-effect waves-light" 
                     onClick={()=>{
-                        postDetails()
-                        ingredient = ingredients.split(",");
-                        console.log(ingredient); // ["Hello,", "World!"]
+                        ingredient = ingredients.split(",")
+                        console.log(ingredient)
+                        postDetails()           
                     }}
             >
                     CreatePost
