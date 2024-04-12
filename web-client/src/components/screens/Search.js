@@ -1,20 +1,47 @@
-import React from 'react';
+import { useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { DateTime } from 'luxon';
 
-function Home() {
+function Search() {
   // ** Hooks
+  const searchRef = useRef();
   const query = useQuery({
     queryKey: 'posts',
     queryFn: () => fetch('http://localhost:6969/allposts').then(res => res.json())
   });
 
+  // ** States
+  const [filteredPosts, setFilteredPosts] = useState([]);
+
+  // ** Functions
+  const handleSearch = () => {
+    const search = searchRef.current.value;
+
+    if (!search) {
+      setFilteredPosts([]);
+
+      return;
+    }
+
+    const filtered = query.data.posts.filter(
+      post => post.body.includes(search) || post.title.includes(search) || post.postedBy.username.includes(search)
+    );
+
+    setFilteredPosts(filtered);
+  };
+
   return (
-    <div className='home'>
-      {query.isLoading && <h1>Loading...</h1>}
-      {query.isError && <h1>Error...</h1>}
+    <>
+      <div className='mycard'>
+        <div className='card auth-card'>
+          <input type='text' placeholder='Enter your query.' ref={searchRef} />
+          <button className='btn waves-effect waves-light' onClick={handleSearch}>
+            Search
+          </button>
+        </div>
+      </div>
       {query.isSuccess &&
-        query.data.posts.map(post => (
+        filteredPosts.map(post => (
           <div className='card home-card'>
             <div className='card-image'>
               <img src={post.photo} />
@@ -31,8 +58,8 @@ function Home() {
             </div>
           </div>
         ))}
-    </div>
+    </>
   );
 }
 
-export default Home;
+export default Search;
