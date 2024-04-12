@@ -13,6 +13,9 @@ function NavBar() {
             <Link to='/search'>Search</Link>
           </li>
           <li>
+            <Link to='/weekly'>Weekly</Link>
+          </li>
+          <li>
             <Link to='/login'>Login</Link>
           </li>
           <li>
