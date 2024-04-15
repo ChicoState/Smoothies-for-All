@@ -1,7 +1,7 @@
 import React,{useState, useEffect} from "react";
 import M from 'materialize-css';
 import {useNavigate} from 'react-router-dom';
-
+import '../../App.css'
 
 const CreatePost = ()=>{
     const navigate = useNavigate()
@@ -9,12 +9,9 @@ const CreatePost = ()=>{
     const [body, setBody] = useState("")
     const [image, setImage] = useState("")
     const [url, setUrl] = useState("")
-    const [ingredients, setIngredients] = useState("")
-    let ingredient = ingredients.split(",");
-    ingredient = JSON.stringify(ingredient)
+    const [ingredient, setIngredient] = useState([""])
 
     useEffect(() => {
-        {console.log(ingredient)}
         if (url) {
             fetch('/create',{
                 method:"post",
@@ -26,8 +23,8 @@ const CreatePost = ()=>{
                 body:JSON.stringify({
                     title,
                     body,
-                    photo:url,
                     ingredient,
+                    photo:url,
                 })
             })
             .then(res => res.json())
@@ -94,15 +91,27 @@ const CreatePost = ()=>{
                 onChange={(e)=>setBody(e.target.value)}
                 />
             </form>
-            <form>
-                <textarea 
-                placeholder="ingredients"   
-                value={ingredients}
-                onChange={(e)=>{
-                    setIngredients(e.target.value)
-                }}
+            
+            <div className="add_ingredient">
+                <input
+                    type="text"
+                    placeholder="Ingredient"   
+                    value={ingredient}
+                    onChange={(e)=>setIngredient(e.target.value)}
                 />
-            </form>
+                <i class="material-icons">add</i>
+            </div>
+
+            
+            <div className="added_ingredients">
+                {ingredient.map(item => {
+                    return(<p>{item}</p>)
+                })}
+            </div>
+            
+
+
+
             <div className="file-field input-field">
                 <div className="btn">
                     <span>Upload Image</span>
@@ -114,8 +123,7 @@ const CreatePost = ()=>{
             </div>
             <button className="btn waves-effect waves-light" 
                     onClick={()=>{
-                        ingredient = ingredients.split(",")
-                        console.log(ingredient)
+                        
                         postDetails()           
                     }}
             >
