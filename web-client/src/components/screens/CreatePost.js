@@ -11,6 +11,8 @@ const CreatePost = ()=>{
     const [url, setUrl] = useState("")
     const [ingredient, setIngredient] = useState("")
     const [ingredients, setIngredients] = useState([])
+    const smoothieTags = ["Healthy", "Dessert", "High Protein", "Fruity", 
+                        "Vegatable", "Breakfast", "Lunch", "Yogurt Based", "Milk Based"]
 
     const ingredientsObjects = ingredients.map(ingredient => {
         return {
@@ -103,8 +105,7 @@ const CreatePost = ()=>{
             </form>
 
             
-            <div className="add_ingredient">
-                
+            <div className="add_ingredient">                
                 <input
                     type="text"
                     placeholder="Ingredient"   
@@ -139,6 +140,11 @@ const CreatePost = ()=>{
                         </div>     
                     )                 
                 })}
+            </div>
+
+            <div className="tag_recipe">
+
+
             </div>
 
             <div className="file-field input-field">
