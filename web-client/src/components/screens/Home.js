@@ -147,9 +147,7 @@ const Home = ()=>{
         })
         .then(res=>res.json())
         .then(result=>{
-            console.log(result)
             const newData = data.map(item=>{
-                console.log(item)
                 if(item._id==result._id) {
                     return result
                 } else {
@@ -202,7 +200,6 @@ const deletePost = (postid)=>{
                            </div>
                            <div className='card-content'>
                             
-                            {console.log(state)}
                             {item.likes.includes(state._id)
                             ?   <i class="material-icons" style={{color:'red'}}
                                 onClick={()=>{unlikePost(item._id)}}
