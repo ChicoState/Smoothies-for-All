@@ -188,6 +188,7 @@ const deletePost = (postid)=>{
             {
                 data.map(item =>{
                     return (
+                        //
                         <div className='card home-card' key={item._id}>
                            <h5>{item.postedBy.username} {item.postedBy._id == state._id 
                            && 
