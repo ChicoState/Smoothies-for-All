@@ -95,5 +95,15 @@ router.put('/comment', requireLogin, (req,res)=>{
     }) 
 })
 
+router.delete('/deletepost/:postId',requireLogin,(req,res)=>{
+    Post.findOne({_id:req.params.postId})
+    .populate("postedBy","_id")
+    .then((result)=> {
+        res.json(result)
+    }).catch((err)=> {
+        return res.status(422).json({error:err})
+    }) 
+
+})
 
 module.exports = router
