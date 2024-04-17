@@ -58,6 +58,25 @@ a{
     align-items: center;
 }
 
-i{
+.added_ingredients {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.edit_ingredients {
+    display: flex;
+    align-items: center;
+    padding: 3px;
+    padding-inline-end: 5px;
+    padding-inline-start: 7px;
+    border: 1.5px solid teal;
+    background-color: rgb(212, 235, 235);
+    border-radius: 17px;
+    list-style-type: none;
+    margin: 5px;
+}
+
+
+i{  
     cursor: pointer;
 }

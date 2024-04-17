@@ -9,9 +9,17 @@ const CreatePost = ()=>{
     const [body, setBody] = useState("")
     const [image, setImage] = useState("")
     const [url, setUrl] = useState("")
-    const [ingredient, setIngredient] = useState([""])
+    const [ingredient, setIngredient] = useState("")
+    const [ingredients, setIngredients] = useState([])
+
+    const ingredientsObjects = ingredients.map(ingredient => {
+        return {
+            text: ingredient
+        };
+    });
 
     useEffect(() => {
+        console.log(ingredients)
         if (url) {
             fetch('/create',{
                 method:"post",
@@ -19,11 +27,11 @@ const CreatePost = ()=>{
                     'Content-Type':"application/json",
                     'Authorization':"Bearer "+localStorage.getItem("jwt")
                 },
-    
+                
                 body:JSON.stringify({
                     title,
                     body,
-                    ingredient,
+                    ingredients:ingredientsObjects,
                     photo:url,
                 })
             })
@@ -64,7 +72,9 @@ const CreatePost = ()=>{
     }
 
     return(
+        
         <div className="card input-filed"
+        
         style={{
             margin: "10px auto",
             maxWidth: "500px",
@@ -91,26 +101,45 @@ const CreatePost = ()=>{
                 onChange={(e)=>setBody(e.target.value)}
                 />
             </form>
+
             
             <div className="add_ingredient">
+                
                 <input
                     type="text"
                     placeholder="Ingredient"   
                     value={ingredient}
                     onChange={(e)=>setIngredient(e.target.value)}
                 />
-                <i class="material-icons">add</i>
+                <i class="material-icons"
+                onClick={()=>{
+
+                    ingredients.push(ingredient)
+                    setIngredient("")
+                }}
+                >add</i>
             </div>
 
             
             <div className="added_ingredients">
-                {ingredient.map(item => {
-                    return(<p>{item}</p>)
+                {ingredients.map(item => {
+                    return(
+                        <div className="edit_ingredients">
+                            <li>{item}</li>
+                            <i class="material-icons"
+                            onClick={()=>{
+                                const index = ingredients.indexOf(item);
+                                if (index > -1) { 
+                                  ingredients.splice(index, 1); 
+                                }
+                                const newIngredients = ingredients.filter(ingredient => ingredient !== item);
+                                setIngredients(newIngredients);
+                            }}
+                            >remove</i>                          
+                        </div>     
+                    )                 
                 })}
             </div>
-            
-
-
 
             <div className="file-field input-field">
                 <div className="btn">
@@ -122,13 +151,10 @@ const CreatePost = ()=>{
                 </div>
             </div>
             <button className="btn waves-effect waves-light" 
-                    onClick={()=>{
-                        
+                    onClick={()=>{                     
                         postDetails()           
                     }}
-            >
-                    CreatePost
-            </button>
+            >CreatePost</button>
         </div>
     )
 }

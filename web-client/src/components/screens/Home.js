@@ -201,16 +201,16 @@ const Home = ()=>{
                             <h6>{item.likes.length} Likes</h6>  
                             <h6>{item.title}</h6>          
                             <p>{item.body}</p>
-                            {/* <details>
-                                <summary>Ingredients</summary>
+                            <details>
+                                <summary>Ingredients ({item.ingredients.length})</summary>
                                 {
-                                item.ingredient.map(record=>{
+                                item.ingredients.map(record=>{
                                     return(
-                                        <h6> {record.text} </h6>
+                                        <li> {record.text} </li>
                                     )
                                 })
                             }
-                            </details>   */}
+                            </details>  
                             <details>
                                 <summary>Comments ({item.comments.length})</summary>
                                 {

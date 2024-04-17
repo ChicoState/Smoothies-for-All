@@ -25,7 +25,7 @@ const postSchema = new mongoose.Schema({
             ref:"User"
         }
     }],
-    ingredient:[{
+    ingredients:[{
         text:String
     }],
     postedBy:{
