@@ -34,7 +34,7 @@ const UserProfile = () => {
                 <h4> {userProfile.user.name} </h4>
                 <h5>{userProfile.user.email} </h5>
                 <div style={{display:"flex", justifyContent:"space-between", width:"108%"}}>
-                    <h6>{userProfile.posts.length}</h6>
+                    <h6>{userProfile.posts.length} post</h6>
                     <h6>50 followers</h6>
                     <h6>500 following</h6>
                 </div>
