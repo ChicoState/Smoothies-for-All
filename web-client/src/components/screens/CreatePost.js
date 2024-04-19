@@ -11,8 +11,9 @@ const CreatePost = ()=>{
     const [url, setUrl] = useState("")
     const [ingredient, setIngredient] = useState("")
     const [ingredients, setIngredients] = useState([])
-    const smoothieTags = ["Healthy", "Dessert", "High Protein", "Fruity", 
-                        "Vegatable", "Breakfast", "Lunch", "Yogurt Based", "Milk Based"]
+    const [tags, setTags] = useState([])
+    const smoothieTags = ["Healthy", "Dessert", "High Protein", "Fruits", 
+                        "Vegatable", "Breakfast", "Lunch"]
 
     const ingredientsObjects = ingredients.map(ingredient => {
         return {
@@ -20,8 +21,14 @@ const CreatePost = ()=>{
         };
     });
 
+    const tagsObjects = tags.map(tag => {
+        return {
+            text: tag
+        };
+    });
+
     useEffect(() => {
-        console.log(ingredients)
+        console.log(tags)
         if (url) {
             fetch('/create',{
                 method:"post",
@@ -34,6 +41,7 @@ const CreatePost = ()=>{
                     title,
                     body,
                     ingredients:ingredientsObjects,
+                    tags:tagsObjects,
                     photo:url,
                 })
             })
@@ -114,8 +122,9 @@ const CreatePost = ()=>{
                 />
                 <i class="material-icons"
                 onClick={()=>{
-
-                    ingredients.push(ingredient)
+                    if (ingredient !== "") {   
+                        ingredients.push(ingredient)
+                    }
                     setIngredient("")
                 }}
                 >add</i>
@@ -142,8 +151,36 @@ const CreatePost = ()=>{
                 })}
             </div>
 
-            <div className="tag_recipe">
+            
 
+            <p>Tag your smoothie!</p>
+            <div className="tag_smoothies">
+                {smoothieTags.map(item => {
+                    return(
+                        <div className="click_tags">
+                            <li>{item}</li>
+                            {tags.includes(item)
+                            ? <i class="material-icons"
+                                onClick={()=>{
+                                    const index = tags.indexOf(item)
+                                    if (index > -1) { 
+                                        tags.splice(index, 1)
+                                    }
+                                    const newTags = tags.filter(tag => tag !== item)
+                                    setTags(newTags)
+                                }}
+                                >remove</i>
+                            :
+                                <i class="material-icons"
+                                onClick={()=>{
+                                    const newTags = [...tags, item]; 
+                                    setTags(newTags);
+                                }}
+                                >add</i>
+                            }                        
+                        </div>     
+                        )                 
+                    })}
 
             </div>
 

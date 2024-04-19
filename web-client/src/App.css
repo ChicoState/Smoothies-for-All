@@ -76,7 +76,42 @@ a{
     margin: 5px;
 }
 
+.tag_smoothies {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.click_tags {
+    display: flex;
+    align-items: center;
+    padding: 3px;
+    padding-inline-end: 5px;
+    padding-inline-start: 7px;
+    border: 1.5px solid teal;
+    background-color: rgb(212, 235, 235);
+    border-radius: 17px;
+    list-style-type: none;
+    margin: 5px;
+}
 
 i{  
     cursor: pointer;
+}
+
+.listed_tags_container {
+    display: flex;
+    align-items: center;
+}
+.listed_tags{
+    display: flex;
+    align-items: center;
+    padding: 3px;
+    padding-inline-end: 7px;
+    padding-inline-start: 7px;
+    border: 1.5px solid teal;
+    background-color: rgb(212, 235, 235);
+    border-radius: 17px;
+    list-style-type: none;
+    margin: 5px;
+    
 }

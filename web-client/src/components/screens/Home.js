@@ -1,5 +1,6 @@
 import React,{useState,useEffect,useContext} from 'react'
 import {UserContext} from '../../App';
+import '../../App.css'
 
 const Home = ()=>{
     const [data, setData] = useState([])
@@ -175,7 +176,6 @@ const Home = ()=>{
                            </div>
                            <div className='card-content'>
                             
-                            {console.log(item)}
                             {item.likes.includes(state._id)
                             ?   <i class="material-icons" style={{color:'red'}}
                                 onClick={()=>{unlikePost(item._id)}}
@@ -201,6 +201,18 @@ const Home = ()=>{
                             <h6>{item.likes.length} Likes</h6>  
                             <h6>{item.title}</h6>          
                             <p>{item.body}</p>
+                            
+                            <div className='listed_tags_container'>
+                            {   
+                                item.tags.map(tag=>{
+                                    return(
+                                            <li className='listed_tags' >{tag.text}</li>
+                                        
+                                    )
+                                })
+                                
+                            }
+                            </div>
                             <details>
                                 <summary>Ingredients ({item.ingredients.length})</summary>
                                 {
