@@ -9,47 +9,37 @@ import Saved from './components/screens/Saved';
 import NavBar from './components/Navbar'; // Navbar
 import "./App.css"; // CSS
 import  {intitalState, reducer} from './reducers/userReducer'
-
+import UserProfile from './components/screens/UserProfile'
 export const UserContext = createContext()
 
-const Routing = ()=>{
-  const navigate = useNavigate()
-  const {state,dispatch} = useContext(UserContext);
+const Routing = () => {
+  const navigate = useNavigate();
+  const { dispatch } = useContext(UserContext);
 
-  useEffect(()=>{
-  // const user = JSON.parse(localStorage.getItem("user"))
-  //   if(user) {
-  //     dispatch({type:"USER", payload:user})
-  //     navigate.push('/')
-  //   } else{
-  //     navigate.push('/lsogin')
-  //   }
-  const userData = localStorage.getItem("user");
-  if (userData) {
-    try {
-      const user = JSON.parse(userData);
-      //console.log(user)
-      if(user) {
-        dispatch({type:"USER", payload:user})
-        navigate('/')
-      } 
-    } catch (error) {
-      navigate('/login')
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      // If user data exists, dispatch the USER action to set the user state
+      dispatch({ type: "USER", payload: user });
+    } else {
+      // If no user data, navigate to the login page
+      navigate('/login');
     }
-  }
+  }, [dispatch, navigate,]);
 
-  },[])
   return (
     <Routes>
       <Route path="/" element={<Home />} /> 
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
-      <Route path="/profile" element={<Profile />} />
+      <Route exact path="/profile" element={<Profile />} />
       <Route path="/create" element={<CreatePost />} />
       <Route path="/saved" element={<Saved />} />
+      <Route path="/profile/:userid" element={<UserProfile />} />
     </Routes>
   )
 }
+
 
 function App() {
   const [state,dispatch] = useReducer(reducer,intitalState)

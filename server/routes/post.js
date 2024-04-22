@@ -18,7 +18,7 @@ router.get('/allposts',requireLogin,(req,res)=>{
 
 
 router.post('/create', requireLogin, (req,res)=>{
-    const {title,body,photo} = req.body
+    const {title,body,ingredients, tags, photo,} = req.body
     if(!title || !body || !photo){
         res.status(422).json({error:"Please add all the fields"})
     }
@@ -27,6 +27,8 @@ router.post('/create', requireLogin, (req,res)=>{
         title,
         body,
         photo,
+        ingredients,
+        tags,
         postedBy:req.user
     })
     post.save().then(result=>{
@@ -37,16 +39,17 @@ router.post('/create', requireLogin, (req,res)=>{
     })
 })
 
-router.get('/myposts',(req,res)=>{
+router.get('/mypost', requireLogin, (req,res) => {
     Post.find({postedBy:req.user._id})
-    .populate("PostedBy", "_id username")
-    .then(myPost=>{
-        res.json({myPost})
+    .populate("postedBy", "_id username")
+    .then(myPost => {
+        res.json({ mypost: myPost });
     })
-    .catch(err=>{
-        console.log(err)
+    .catch(err => {
+        console.log(err);
     })
 })
+
 
 //update operation
 router.put('/like', requireLogin, (req,res)=>{
@@ -92,6 +95,17 @@ router.put('/comment', requireLogin, (req,res)=>{
     }).catch((err)=> {
         return res.status(422).json({error:err})
     }) 
+})
+
+router.delete('/deletepost/:postId',requireLogin,(req,res)=>{
+    Post.findOne({_id:req.params.postId})
+    .populate("postedBy","_id")
+    .then((result)=> {
+        res.json(result)
+    }).catch((err)=> {
+        return res.status(422).json({error:err})
+    }) 
+
 })
 
 module.exports = router

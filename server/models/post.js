@@ -25,6 +25,12 @@ const postSchema = new mongoose.Schema({
             ref:"User"
         }
     }],
+    ingredients:[{
+        text:String
+    }],
+    tags:[{
+        text:String
+    }],
     postedBy:{
         type:ObjectId,
         ref:"User"

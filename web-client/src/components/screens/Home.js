@@ -1,5 +1,6 @@
 import React,{useState,useEffect,useContext} from 'react'
 import {UserContext} from '../../App';
+import '../../App.css'
 
 const Home = ()=>{
     const [data, setData] = useState([])
@@ -147,9 +148,7 @@ const Home = ()=>{
         })
         .then(res=>res.json())
         .then(result=>{
-            console.log(result)
             const newData = data.map(item=>{
-                console.log(item)
                 if(item._id==result._id) {
                     return result
                 } else {
@@ -162,20 +161,46 @@ const Home = ()=>{
         })
     }
     
-    
+const deletePost = (postid)=>{
+    fetch(`/deletepost/${postid}`,{
+        method:"delete",
+            headers:{
+                Authorization:"Bearer "+localStorage.getItem("jwt")
+            }
+        }).then(res=>{
+            if (res.ok) {
+                return res.json();
+            } else {
+                console.error("Error response:", res);
+            }
+        })
+        .then(result=>{
+            console.log(result)
+            const newData = data.filter(item=>{
+                return item._id !== result._id
+            })
+            setData(newData)
+        })
+    }
     return(
         <div className='home'>
             {
                 data.map(item =>{
                     return (
+                        //
                         <div className='card home-card' key={item._id}>
-                           <h5>{item.postedBy.username}</h5>
+                           <h5>{item.postedBy.username} {item.postedBy._id == state._id 
+                           && 
+                           <i className='material-icons' style={{
+                            float: "right"
+                           }}
+                           onClick={()=> deletePost(item._id)}
+                           > delete </i> }</h5>
                            <div className='card-image'>
                                <img src={item.photo}/>
                            </div>
                            <div className='card-content'>
                             
-                            {console.log(state)}
                             {item.likes.includes(state._id)
                             ?   <i class="material-icons" style={{color:'red'}}
                                 onClick={()=>{unlikePost(item._id)}}
@@ -201,7 +226,31 @@ const Home = ()=>{
                             <h6>{item.likes.length} Likes</h6>  
                             <h6>{item.title}</h6>          
                             <p>{item.body}</p>
-                            {
+                            
+                            <div className='listed_tags_container'>
+                            {   
+                                item.tags.map(tag=>{
+                                    return(
+                                            <li className='listed_tags' >{tag.text}</li>
+                                        
+                                    )
+                                })
+                                
+                            }
+                            </div>
+                            <details>
+                                <summary>Ingredients ({item.ingredients.length})</summary>
+                                {
+                                item.ingredients.map(record=>{
+                                    return(
+                                        <li> {record.text} </li>
+                                    )
+                                })
+                            }
+                            </details>  
+                            <details>
+                                <summary>Comments ({item.comments.length})</summary>
+                                {
                                 item.comments.map(record=>{
                                     return(
                                         <h6 key={record._id}>
@@ -211,6 +260,8 @@ const Home = ()=>{
                                     )
                                 })
                             }
+                            </details>    
+                                                    
                             <form onSubmit={(e)=>{
                                 e.preventDefault()
                                 makeComment(e.target[0].value, item._id)
