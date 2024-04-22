@@ -1,5 +1,6 @@
 import React,{useState,useEffect,useContext} from 'react'
 import {UserContext} from '../../App';
+import '../../App.css'
 
 const Home = ()=>{
     const [data, setData] = useState([])
@@ -226,6 +227,27 @@ const deletePost = (postid)=>{
                             <h6>{item.title}</h6>          
                             <p>{item.body}</p>
                             
+                            <div className='listed_tags_container'>
+                            {   
+                                item.tags.map(tag=>{
+                                    return(
+                                            <li className='listed_tags' >{tag.text}</li>
+                                        
+                                    )
+                                })
+                                
+                            }
+                            </div>
+                            <details>
+                                <summary>Ingredients ({item.ingredients.length})</summary>
+                                {
+                                item.ingredients.map(record=>{
+                                    return(
+                                        <li> {record.text} </li>
+                                    )
+                                })
+                            }
+                            </details>  
                             <details>
                                 <summary>Comments ({item.comments.length})</summary>
                                 {
@@ -238,7 +260,8 @@ const deletePost = (postid)=>{
                                     )
                                 })
                             }
-                            </details>                            
+                            </details>    
+                                                    
                             <form onSubmit={(e)=>{
                                 e.preventDefault()
                                 makeComment(e.target[0].value, item._id)
