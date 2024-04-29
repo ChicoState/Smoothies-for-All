@@ -56,7 +56,7 @@ const Signup = ()=>{
                     value={password}
                     onChange={(e)=>setPassword(e.target.value)}
                 />
-                <button class="btn waves-effect waves-light" onClick={()=>PostData()}>
+                <button className="btn waves-effect waves-light" onClick={()=>PostData()}>
                      Sign up 
                 </button>
             </div>

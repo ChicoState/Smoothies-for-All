@@ -8,10 +8,10 @@ const NavBar = ()=> {
     const renderList = () =>{
         if(state) {
             return [
-                <li><Link to="/profile">Profile</Link></li>,
-                 <li><Link to="/create">CreatePost</Link></li>,
-                 <li><Link to="/saved">Saved</Link></li>,
-                 <li>
+                <li key = "profile"><Link to="/profile">Profile</Link></li>,
+                 <li key = "create"><Link to="/create">CreatePost</Link></li>,
+                 <li key = "saved"><Link to="/saved">Saved</Link></li>,
+                 <li key = "logout">
                     <button className='btn' onClick={()=>{
                     localStorage.clear() 
                     dispatch({type:"CLEAR"})
@@ -22,8 +22,8 @@ const NavBar = ()=> {
             ]
         } else {
             return [
-                <li><Link to="/login">Login</Link></li>,
-                <li><Link to="/signup">Signup</Link></li>
+                <li key = "login"><Link to="/login">Login</Link></li>,
+                <li key = "signup"><Link to="/signup">Signup</Link></li>
             ]
         }
     }

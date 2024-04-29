@@ -28,7 +28,7 @@ const CreatePost = ()=>{
     });
 
     useEffect(() => {
-        console.log(tags)
+        //console.log(tags)
         if (url) {
             fetch('/create',{
                 method:"post",
@@ -120,7 +120,7 @@ const CreatePost = ()=>{
                     value={ingredient}
                     onChange={(e)=>setIngredient(e.target.value)}
                 />
-                <i class="material-icons"
+                <i className="material-icons"
                 onClick={()=>{
                     if (ingredient !== "") {   
                         ingredients.push(ingredient)
@@ -134,9 +134,9 @@ const CreatePost = ()=>{
             <div className="added_ingredients">
                 {ingredients.map(item => {
                     return(
-                        <div className="edit_ingredients">
+                        <div className="edit_ingredients" key={item}>
                             <li>{item}</li>
-                            <i class="material-icons"
+                            <i className="material-icons"
                             onClick={()=>{
                                 const index = ingredients.indexOf(item);
                                 if (index > -1) { 
@@ -157,10 +157,10 @@ const CreatePost = ()=>{
             <div className="tag_smoothies">
                 {smoothieTags.map(item => {
                     return(
-                        <div className="click_tags">
+                        <div className="click_tags" key={item}>
                             <li>{item}</li>
                             {tags.includes(item)
-                            ? <i class="material-icons"
+                            ? <i className="material-icons"
                                 onClick={()=>{
                                     const index = tags.indexOf(item)
                                     if (index > -1) { 
@@ -171,7 +171,7 @@ const CreatePost = ()=>{
                                 }}
                                 >remove</i>
                             :
-                                <i class="material-icons"
+                                <i className="material-icons"
                                 onClick={()=>{
                                     const newTags = [...tags, item]; 
                                     setTags(newTags);
