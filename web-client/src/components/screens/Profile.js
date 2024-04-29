@@ -36,12 +36,12 @@ const Profile = ()=>{
 
             <div className='gallery'>
                 {
- mypics.map(item => {
-    // Make sure `item._id` is a unique identifier for each item
-    return (
-      <img key={item._id} className='item' src={item.photo} alt={item.title}/>
-    )
-  })
+                    mypics.map(item => {
+                    // Make sure `item._id` is a unique identifier for each item
+                    return (
+                    <img key={item._id} className='item' src={item.photo} alt={item.title}/>
+                    )
+                    })
   
                 }
 

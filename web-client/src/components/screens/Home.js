@@ -4,8 +4,9 @@ import '../../App.css'
 
 const Home = ()=>{
     const [data, setData] = useState([])
-
+    
     const {state,dispatch} = useContext(UserContext)
+    
     useEffect(()=> {
         fetch('/allposts', {
             headers:{
@@ -14,6 +15,7 @@ const Home = ()=>{
         })
         .then(res=>res.json())
         .then(result=>{
+            console.log(result)
             setData(result.posts)
         })
     },[])
@@ -37,10 +39,9 @@ const Home = ()=>{
             }
         })
         .then(result=>{
-            //console.log(result)
+            
             const newData = data.map(item=>{
                 
-                console.log(item)
                 if(item._id==result._id) {
                     return result
                 } else {
@@ -180,6 +181,8 @@ const deletePost = (postid)=>{
                 return item._id !== result._id
             })
             setData(newData)
+        }).catch(err=>{
+            console.log(err)
         })
     }
     return(
