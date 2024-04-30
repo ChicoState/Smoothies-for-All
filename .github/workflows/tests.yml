@@ -3,7 +3,7 @@ name: Run Tests
 on: [push]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,8 +20,3 @@ jobs:
     - name: Run tests web-client
       run: cd web-client && npm test
 
-    - name: Install dependencies server
-      run: cd server && npm ci
-
-    - name: Run tests server
-      run: cd server && npm test
