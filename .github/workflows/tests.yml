@@ -14,8 +14,14 @@ jobs:
       with:
         node-version: 20.11.1
 
-    - name: Install dependencies
+    - name: Install dependencies web-client
       run: cd web-client && npm ci
 
-    - name: Run tests
+    - name: Run tests web-client
       run: cd web-client && npm test
+
+    - name: Install dependencies server
+      run: cd server && npm ci
+
+    - name: Run tests server
+      run: cd server && npm test
