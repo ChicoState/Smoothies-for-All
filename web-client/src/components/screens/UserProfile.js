@@ -16,10 +16,36 @@ const UserProfile = () => {
             }
         }).then(res => res.json())
         .then(result => {
-            console.log(result)
+            // console.log(result)
             setProfile(result);
         });
     }, [])
+
+    const followUser = ()=>{
+        fetch('/follow',{
+            method: "put",
+            headers: {
+                "Content-Type" : "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("jwt")
+            },
+            body: JSON.stringify({
+                following_id:userid
+            })
+        }).then(res=>{
+            if (res.ok) {
+                return res.json();
+            } else {
+                console.error("Error response:", res);
+            }
+        })
+        .then(data=>{
+            console.log(data)
+            dispatch({type:"UPDATE", payload:{following:data.following,followers:data.followers}})
+            localStorage.setItem("user", JSON.stringify(data))
+        }).catch(err=>{
+            console.log(err)
+        })
+    }
     return(
         <>
         {userProfile ? 
@@ -34,10 +60,13 @@ const UserProfile = () => {
                 <h4> {userProfile.user.name} </h4>
                 <h5>{userProfile.user.email} </h5>
                 <div style={{display:"flex", justifyContent:"space-between", width:"108%"}}>
-                    <h6>{userProfile.posts.length} post</h6>
-                    <h6>50 followers</h6>
-                    <h6>500 following</h6>
+                    <h6>{userProfile.posts.length}</h6>
+                    <h6>{userProfile.user.followers.length} followers</h6>
+                    <h6>{userProfile.user.following.length} following</h6>
                 </div>
+                <button className="btn waves-effect waves-light" onClick={()=>followUser()}>
+                     Login 
+                </button>
             </div>
 
         </div>

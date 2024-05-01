@@ -1,12 +1,18 @@
 export const intitalState = null
 
 export const reducer  = (state, action) => {
-    if (action.type=="USER") {
-        return action.payload;
+    switch (action.type) {
+        case "USER":
+            return action.payload;
+        case "CLEAR":
+            return null;
+        case "UPDATE":
+            return {
+                ...state,
+                followers: action.payload.followers,
+                following: action.payload.following
+            }
+        default:
+            return state;
     }
-    if(action.type=="CLEAR") {
-        return null;
-    }
-    
-    return state;
 }

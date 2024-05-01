@@ -1,7 +1,7 @@
 import React,{useState, useEffect} from "react";
 import M from 'materialize-css';
 import {useNavigate} from 'react-router-dom';
-
+import '../../App.css'
 
 const CreatePost = ()=>{
     const navigate = useNavigate()
@@ -9,8 +9,26 @@ const CreatePost = ()=>{
     const [body, setBody] = useState("")
     const [image, setImage] = useState("")
     const [url, setUrl] = useState("")
+    const [ingredient, setIngredient] = useState("")
+    const [ingredients, setIngredients] = useState([])
+    const [tags, setTags] = useState([])
+    const smoothieTags = ["Healthy", "Dessert", "High Protein", "Fruits", 
+                        "Vegatable", "Breakfast", "Lunch"]
+
+    const ingredientsObjects = ingredients.map(ingredient => {
+        return {
+            text: ingredient
+        };
+    });
+
+    const tagsObjects = tags.map(tag => {
+        return {
+            text: tag
+        };
+    });
 
     useEffect(() => {
+        console.log(tags)
         if (url) {
             fetch('/create',{
                 method:"post",
@@ -18,10 +36,12 @@ const CreatePost = ()=>{
                     'Content-Type':"application/json",
                     'Authorization':"Bearer "+localStorage.getItem("jwt")
                 },
-    
+                
                 body:JSON.stringify({
                     title,
                     body,
+                    ingredients:ingredientsObjects,
+                    tags:tagsObjects,
                     photo:url,
                 })
             })
@@ -62,7 +82,9 @@ const CreatePost = ()=>{
     }
 
     return(
+        
         <div className="card input-filed"
+        
         style={{
             margin: "10px auto",
             maxWidth: "500px",
@@ -76,12 +98,92 @@ const CreatePost = ()=>{
                 value={title}
                 onChange={(e)=>setTitle(e.target.value)}
             />
-            <input 
+            {/* <input 
                 type="text"
                 placeholder="body"   
                 value={body}
                 onChange={(e)=>setBody(e.target.value)}
-            />
+            /> */}
+            <form>
+                <textarea 
+                placeholder="body"   
+                value={body}
+                onChange={(e)=>setBody(e.target.value)}
+                />
+            </form>
+
+            
+            <div className="add_ingredient">                
+                <input
+                    type="text"
+                    placeholder="Ingredient"   
+                    value={ingredient}
+                    onChange={(e)=>setIngredient(e.target.value)}
+                />
+                <i class="material-icons"
+                onClick={()=>{
+                    if (ingredient !== "") {   
+                        ingredients.push(ingredient)
+                    }
+                    setIngredient("")
+                }}
+                >add</i>
+            </div>
+
+            
+            <div className="added_ingredients">
+                {ingredients.map(item => {
+                    return(
+                        <div className="edit_ingredients">
+                            <li>{item}</li>
+                            <i class="material-icons"
+                            onClick={()=>{
+                                const index = ingredients.indexOf(item);
+                                if (index > -1) { 
+                                  ingredients.splice(index, 1); 
+                                }
+                                const newIngredients = ingredients.filter(ingredient => ingredient !== item);
+                                setIngredients(newIngredients);
+                            }}
+                            >remove</i>                          
+                        </div>     
+                    )                 
+                })}
+            </div>
+
+            
+
+            <p>Tag your smoothie!</p>
+            <div className="tag_smoothies">
+                {smoothieTags.map(item => {
+                    return(
+                        <div className="click_tags">
+                            <li>{item}</li>
+                            {tags.includes(item)
+                            ? <i class="material-icons"
+                                onClick={()=>{
+                                    const index = tags.indexOf(item)
+                                    if (index > -1) { 
+                                        tags.splice(index, 1)
+                                    }
+                                    const newTags = tags.filter(tag => tag !== item)
+                                    setTags(newTags)
+                                }}
+                                >remove</i>
+                            :
+                                <i class="material-icons"
+                                onClick={()=>{
+                                    const newTags = [...tags, item]; 
+                                    setTags(newTags);
+                                }}
+                                >add</i>
+                            }                        
+                        </div>     
+                        )                 
+                    })}
+
+            </div>
+
             <div className="file-field input-field">
                 <div className="btn">
                     <span>Upload Image</span>
@@ -92,10 +194,10 @@ const CreatePost = ()=>{
                 </div>
             </div>
             <button className="btn waves-effect waves-light" 
-                    onClick={()=>postDetails()}
-            >
-                    CreatePost
-            </button>
+                    onClick={()=>{                     
+                        postDetails()           
+                    }}
+            >CreatePost</button>
         </div>
     )
 }
