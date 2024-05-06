@@ -162,22 +162,24 @@ const Home = ()=>{
         })
     }
     
-const deletePost = (postid)=>{
-    fetch(`/deletepost/${postid}`,{
-        method:"delete",
-            headers:{
-                Authorization:"Bearer "+localStorage.getItem("jwt")
+    const deletePost = (postid) => {
+        fetch(`/deletepost/${postid}`, {
+            method: "delete",
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("jwt")
             }
-        }).then(res=>res.json())
-        .then(result=>{
-            console.log(result)
-            const newData = data.filter(item=>{
-                return item._id !== result._id
-            })
-            setData(newData)
-        }).catch(err=>{
-            console.log(err)
+        }).then(res => {
+            if (res.ok) {
+                return res.json();
+            } else {
+                console.error("Error response:", res);
+            }
         })
+        .then(result => {
+            console.log(result);
+            const newData = data.filter(item => item._id !== postid);
+            setData(newData);
+        });
     }
     return(
         <div className='home'>

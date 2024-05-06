@@ -6,6 +6,9 @@ import {useParams} from 'react-router-dom'
 
 const UserProfile = () => {
     const [userProfile, setProfile] = useState(null);
+    // Working
+    const [showFollow, setShowFollow] = useState(true);
+    // const [showFollow, setShowFollow] = useState(state?!state.following.include(userid):true)
     const { state, dispatch } = useContext(UserContext);
     const { userid } = useParams();
     
@@ -16,7 +19,7 @@ const UserProfile = () => {
             }
         }).then(res => res.json())
         .then(result => {
-            // console.log(result)
+            console.log(result)
             setProfile(result);
         });
     }, [])
@@ -29,7 +32,7 @@ const UserProfile = () => {
                 "Authorization": "Bearer " + localStorage.getItem("jwt")
             },
             body: JSON.stringify({
-                following_id:userid
+                followId:userid
             })
         }).then(res=>{
             if (res.ok) {
@@ -42,8 +45,51 @@ const UserProfile = () => {
             console.log(data)
             dispatch({type:"UPDATE", payload:{following:data.following,followers:data.followers}})
             localStorage.setItem("user", JSON.stringify(data))
-        }).catch(err=>{
-            console.log(err)
+            setProfile((prevState)=>{
+                return {
+                    ...prevState,
+                    user:{
+                        ...prevState.user,
+                        followers:[...prevState.user.followers,data._id]
+                    }
+                }
+            })
+            setShowFollow(false)
+        })
+    }
+
+    const unfollowUser = ()=>{
+        fetch('/unfollow',{
+            method: "put",
+            headers: {
+                "Content-Type" : "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("jwt")
+            },
+            body: JSON.stringify({
+                unfollowId:userid
+            })
+        }).then(res=>{
+            if (res.ok) {
+                return res.json();
+            } else {
+                console.error("Error response:", res);
+            }
+        })
+        .then(data=>{
+            console.log(data)
+            dispatch({type:"UPDATE", payload:{following:data.following,followers:data.followers}})
+            localStorage.setItem("user", JSON.stringify(data))
+            setProfile((prevState)=>{
+                const newFollower = prevState.user.followers.filter(item=>item != data._id)
+                return {
+                    ...prevState,
+                    user:{
+                        ...prevState.user,
+                        followers:newFollower
+                    }
+                }
+            })
+            setShowFollow(true)
         })
     }
     return(
@@ -64,9 +110,17 @@ const UserProfile = () => {
                     <h6>{userProfile.user.followers.length} followers</h6>
                     <h6>{userProfile.user.following.length} following</h6>
                 </div>
-                <button className="btn waves-effect waves-light" onClick={()=>followUser()}>
-                     Login 
-                </button>
+
+
+                {showFollow?
+                <button class="btn waves-effect waves-light"
+                onClick={()=>{followUser()}}
+                >Follow</button>
+                :
+                <button class="btn waves-effect waves-light"
+                onClick={()=>{unfollowUser()}}
+                >Unfollow</button>
+                }
             </div>
 
         </div>
