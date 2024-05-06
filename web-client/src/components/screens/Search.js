@@ -1,11 +1,13 @@
 import { useRef, useState, useEffect, useContext } from "react";
 import { likePost, makeComment, savePost, unlikePost, unsavePost } from "../../utils/postActions";
 import { UserContext } from "../../App";
+import { useShoppingList } from "../../hooks/useShoppingList";
 
 function Search() {
   // ** Hooks
   const searchRef = useRef();
   const { state, dispatch } = useContext(UserContext);
+  const {add} = useShoppingList();
 
   // ** States
   const [baseData, setBaseData] = useState([]);
@@ -152,6 +154,15 @@ function Search() {
                 {post.ingredients.map((record) => {
                   return <li> {record.text} </li>;
                 })}
+                {post.ingredients.length > 0 && (
+                  <button
+                    className="btn waves-effect waves-light #64b5f6 blue darken-1"
+                    style={{ margin: "10px 0px" }}
+                    onClick={() => add(post.ingredients.map((ingredient) => ingredient.text))}
+                  >
+                    Add to Shopping List
+                  </button>
+                )}
               </details>
               <details>
                 <summary>Comments ({post.comments.length})</summary>
