@@ -1,50 +1,113 @@
-const express = require('express');
-const router = express.Router();
-const mongoose = require('mongoose');
-const Post = mongoose.model('Post');
-const requireLogin = require('../middleware/requireLogin');
+const express = require('express')
+const router = express.Router()
+const mongoose = require('mongoose')
+const Post = mongoose.model('Post')
+const requireLogin = require('../middleware/requireLogin')
+const cors = require('cors')
 
-router.get('/allposts', (req, res) => {
-  Post.find()
-    .populate('postedBy', '_id username')
-    .then(posts => {
-      res.json({ posts });
+router.get('/allposts', cors(),requireLogin,(req,res)=>{
+    Post.find()
+    .populate("postedBy","_id username")
+    .populate("comments.postedBy","_id username")
+    .then(posts=>{
+        res.json({posts})
     })
-    .catch(err => {
-      console.log(err);
-    });
-});
-
-router.post('/createpost', requireLogin, (req, res) => {
-  const { title, body } = req.body;
-  if (!title || !body) {
-    res.status(422).json({ error: 'Please add all the fields' });
-  }
-  req.user.password = undefined;
-  const post = new Post({
-    title,
-    body,
-    postedBy: req.user
-  });
-  post
-    .save()
-    .then(result => {
-      res.json({ post: result });
+    .catch(err=>{
+        console.log(err)
     })
-    .catch(err => {
-      console.log(err);
-    });
-});
+})
 
-router.get('/myposts', (req, res) => {
-  Post.find({ postedBy: req.user._id })
-    .populate('PostedBy', '_id name')
+
+router.post('/create', requireLogin, (req,res)=>{
+    const {title,body,photo} = req.body
+    if(!title || !body || !photo){
+        res.status(422).json({error:"Please add all the fields"})
+    }
+    req.user.password = undefined
+    const post = new Post({
+        title,
+        body,
+        photo,
+        postedBy:req.user
+    })
+    post.save().then(result=>{
+        res.json({post:result})
+    })
+    .catch(err=>{
+        console.log(err)
+    })
+})
+
+router.get('/mypost', requireLogin, (req,res) => {
+    Post.find({postedBy:req.user._id})
+    .populate("postedBy", "_id username")
     .then(myPost => {
-      res.json({ myPost });
+        res.json({ mypost: myPost });
     })
     .catch(err => {
-      console.log(err);
-    });
-});
+        console.log(err);
+    })
+})
 
-module.exports = router;
+
+//update operation
+router.put('/like', requireLogin, (req,res)=>{
+    Post.findByIdAndUpdate(req.body.postId, {
+        $push:{likes:req.user._id}
+    },
+    {
+        new:true
+    }).then((result)=> {
+        res.json(result)
+    }).catch((err)=> {
+        return res.status(422).json({error:err})
+    }) 
+})
+
+router.put('/unlike', requireLogin,(req,res)=>{
+    Post.findByIdAndUpdate(req.body.postId, {
+        $pull:{likes:req.user._id}
+    },
+    {
+        new:true
+    }).then((result)=> {
+        res.json(result)
+    }).catch((err)=> {
+        return res.status(422).json({error:err})
+    }) 
+    
+})
+
+router.put('/comment', requireLogin, (req,res)=>{
+    const comment = {
+        text:req.body.text,
+        postedBy:req.user._id
+    }
+    Post.findByIdAndUpdate(req.body.postId, {
+        $push:{comments:comment}
+    },
+    {
+        new:true
+    }).populate("comments.postedBy", "_id username")
+    .then((result)=> {
+        res.json(result)
+    }).catch((err)=> {
+        return res.status(422).json({error:err})
+    }) 
+})
+
+router.get('/likes/weekly', requireLogin, (req,res)=>{
+    Post.find({
+        // createdAt:{$gte: new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000)}
+    })
+    .sort({likes:-1})
+    .populate("postedBy", "_id username")
+    .then((result)=> {
+        res.json(result)
+    }).catch((err)=> {
+        return res.status(422).json({error:err})
+    }) 
+})
+
+
+module.exports = router

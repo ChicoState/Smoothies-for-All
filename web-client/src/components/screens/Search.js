@@ -7,7 +7,19 @@ function Search() {
   const searchRef = useRef();
   const query = useQuery({
     queryKey: 'posts',
-    queryFn: () => fetch('http://localhost:6969/allposts').then(res => res.json())
+    queryFn: async () => {
+      const response = await fetch('http://localhost:6969/allposts', {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('jwt')}`
+        }
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    }
   });
 
   // ** States

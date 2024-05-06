@@ -16,7 +16,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <NavBar /> {}
+        <NavBar /> 
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />

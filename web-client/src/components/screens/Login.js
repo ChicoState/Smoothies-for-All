@@ -7,7 +7,7 @@ function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const PostData = () => {
-    fetch('/signin', {
+    fetch('http://localhost:6969/signin', {
       method: 'post',
       headers: {
         'Content-Type': 'application/json'

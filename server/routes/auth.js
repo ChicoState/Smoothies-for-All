@@ -60,7 +60,9 @@ router.post('/signin', (req, res) => {
           res.json({ message: 'successful signin' });
           const token = jwt.sign({ _id: savedUser._id }, JWT_SECRET);
           const { _id, username, email } = savedUser;
-          res.json({ token, user: { _id, username, email } });
+          // res.json({ token, user: { _id, username, email } });
+          res.setHeader('Set-Cookie', `token=${token}; HttpOnly`);
+          res.json({ user: { _id, username, email } });
         } else {
           return res.status(422).json({ error: 'invalid username or password' });
         }

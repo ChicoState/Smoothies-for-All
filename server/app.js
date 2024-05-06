@@ -22,10 +22,7 @@ require('./models/post');
 
 app.use(express.json());
 app.use(
-  cors({
-    origin: '*',
-    credentials: true
-  })
+  cors()
 );
 app.use(require('./routes/auth'));
 app.use(require('./routes/post'));
