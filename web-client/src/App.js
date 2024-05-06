@@ -1,18 +1,22 @@
-import React,{useEffect, createContext,useReducer,useContext} from 'react';
-import { BrowserRouter, Route, Routes, useNavigate  } from 'react-router-dom';
-import Home from './components/screens/Home';
-import Profile from './components/screens/Profile';
-import Signup from './components/screens/Signup';
-import Login from './components/screens/Login';
-import CreatePost from './components/screens/CreatePost';
-import Saved from './components/screens/Saved';
-import Weekly from './components/screens/Weekly';
-import Search from './components/screens/Search';
-import NavBar from './components/Navbar'; // Navbar
+import React, { useEffect, createContext, useReducer, useContext } from "react";
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
+import Home from "./components/screens/Home";
+import Profile from "./components/screens/Profile";
+import Signup from "./components/screens/Signup";
+import Login from "./components/screens/Login";
+import CreatePost from "./components/screens/CreatePost";
+import Saved from "./components/screens/Saved";
+import Weekly from "./components/screens/Weekly";
+import Search from "./components/screens/Search";
+import NavBar from "./components/Navbar"; // Navbar
 import "./App.css"; // CSS
-import  {intitalState, reducer} from './reducers/userReducer'
-import UserProfile from './components/screens/UserProfile'
-export const UserContext = createContext()
+import { intitalState, reducer } from "./reducers/userReducer";
+import UserProfile from "./components/screens/UserProfile";
+import {
+  ShoppingListConsumer,
+  ShoppingListProvider,
+} from "./context/ShoppingList";
+export const UserContext = createContext();
 
 const Routing = () => {
   const navigate = useNavigate();
@@ -25,13 +29,13 @@ const Routing = () => {
       dispatch({ type: "USER", payload: user });
     } else {
       // If no user data, navigate to the login page
-      navigate('/login');
+      navigate("/login");
     }
-  }, [dispatch, navigate,]);
+  }, [dispatch, navigate]);
 
   return (
     <Routes>
-      <Route path="/" element={<Home />} /> 
+      <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route exact path="/profile" element={<Profile />} />
@@ -41,20 +45,89 @@ const Routing = () => {
       <Route path="/weekly" element={<Weekly />} />
       <Route path="/search" element={<Search />} />
     </Routes>
-  )
-}
-
+  );
+};
 
 function App() {
-  const [state,dispatch] = useReducer(reducer,intitalState)
+  const [state, dispatch] = useReducer(reducer, intitalState);
   return (
-    <UserContext.Provider value={{state,dispatch}}>
+    <UserContext.Provider value={{ state, dispatch }}>
       <BrowserRouter>
-        <NavBar /> {/* Nav bar */}
-        <Routing/>
+        <ShoppingListProvider>
+          <ShoppingListConsumer>
+            {({ list, remove, open, setOpen, clear }) => (
+              <>
+                <NavBar />
+                <Routing />
+                {list && list.length > 0 && open && (
+                  <div
+                    className="card blue-grey darken-1"
+                    style={{
+                      position: "fixed",
+                      bottom: "20px",
+                      right: "20px",
+                      width: "300px",
+                      padding: "10px",
+                    }}
+                  >
+                    <div className="card-title white-text center-align">
+                      <span className="card-title">Shopping List</span>
+                      <i className="material-icons right" onClick={()=>{
+                        setOpen(false)
+                      }}>minimize</i>
+                    </div>
+                    <div className="card-content white-text">
+                      <ul className="collection">
+                        {list.map((item, index) => (
+                          <li
+                            key={index}
+                            className="collection-item blue-grey darken-3"
+                          >
+                            {item.name} - {item.quantity}
+                            <button
+                              onClick={() => remove(index)}
+                              className="btn-floating btn-small waves-effect waves-light red right"
+                            >
+                              <i className="material-icons">remove</i>
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                        <button
+                          className="btn waves-effect waves-light #64b5f6 blue darken-1"
+                          onClick={() => clear()}
+                        >
+                          Clear Shopping List
+                        </button>
+                    </div>
+                  </div>
+                )}
+                {list && list.length > 0 && !open && (
+                  <div
+                    className="card blue-grey darken-1"
+                    style={{
+                      position: "fixed",
+                      bottom: "20px",
+                      right: "20px",
+                      width: "300px",
+                      padding: "10px",
+                    }}
+                  >
+                    <div className="card-title white-text center-align">
+                      <span className="card-title">Shopping List</span>
+                      <i className="material-icons right" onClick={()=>{
+                        setOpen(true)
+                      }}>maximize</i>
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+          </ShoppingListConsumer>
+        </ShoppingListProvider>
       </BrowserRouter>
+      ;
     </UserContext.Provider>
-      
   );
 }
 

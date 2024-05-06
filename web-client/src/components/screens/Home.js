@@ -2,11 +2,13 @@ import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../App";
 import { deletePost, likePost, makeComment, savePost, unlikePost, unsavePost } from "../../utils/postActions";
 import "../../App.css";
+import { useShoppingList } from "../../hooks/useShoppingList";
 
 const Home = () => {
   const [data, setData] = useState([]);
 
   const { state, dispatch } = useContext(UserContext);
+  const {add} = useShoppingList();
 
   useEffect(() => {
     fetch("/allposts", {
@@ -134,6 +136,17 @@ const Home = () => {
                 {item.ingredients.map((record) => {
                   return <li> {record.text} </li>;
                 })}
+                {item.ingredients.length > 0 && (
+                  <button
+                    className="btn waves-effect waves-light #64b5f6 blue darken-1"
+                    style={{ margin: "10px 0px" }}
+                    onClick={() => {
+                      add(item.ingredients.map((ingredient) => ingredient.text));
+                    }}
+                  >
+                    Add to Shopping List
+                  </button>
+                )}
               </details>
               <details>
                 <summary>Comments ({item.comments.length})</summary>
