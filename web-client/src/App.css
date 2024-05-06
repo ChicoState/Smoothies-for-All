@@ -120,3 +120,7 @@ i{
     margin: 5px;
     
 }
+
+.body_style {
+    white-space: pre-wrap
+}

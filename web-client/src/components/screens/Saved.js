@@ -210,7 +210,8 @@ const deletePost = (postid)=>{
                 data.map(item =>{
                     return (   
                         <div className='card home-card' key={item._id}>
-                           <h5>{item.postedBy.username} {item.postedBy._id == state._id 
+                           <h5> <a href={`/profile/${item.postedBy._id}`} target="_blank" rel="noopener noreferrer">{item.postedBy.username}</a>
+                            {item.postedBy._id == state._id 
                            && 
                            <i className='material-icons' style={{
                             float: "right"

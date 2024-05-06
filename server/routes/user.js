@@ -13,7 +13,7 @@ router.get('/user/:id', requireLogin, (req, res) => {
                 return res.status(404).json({error: "User not found"});
             }
             Post.find({postedBy: req.params.id})
-                .populate("postedBy", "_id name")
+                .populate("postedBy", "_id username")
                 .exec()
                 .then(posts => {
                     res.json({user, posts});
