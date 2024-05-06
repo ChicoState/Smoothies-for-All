@@ -7,6 +7,7 @@ import Login from './components/screens/Login';
 import CreatePost from './components/screens/CreatePost';
 import Saved from './components/screens/Saved';
 import Weekly from './components/screens/Weekly';
+import Search from './components/screens/Search';
 import NavBar from './components/Navbar'; // Navbar
 import "./App.css"; // CSS
 import  {intitalState, reducer} from './reducers/userReducer'
@@ -38,6 +39,7 @@ const Routing = () => {
       <Route path="/saved" element={<Saved />} />
       <Route path="/profile/:userid" element={<UserProfile />} />
       <Route path="/weekly" element={<Weekly />} />
+      <Route path="/search" element={<Search />} />
     </Routes>
   )
 }
