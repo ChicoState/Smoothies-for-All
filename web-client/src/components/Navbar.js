@@ -9,6 +9,7 @@ const NavBar = ()=> {
         if(state) {
             return [
                 <li><Link to="/profile">Profile</Link></li>,
+                <li><Link to="/weekly">WeeklyPost</Link></li>,
                  <li><Link to="/create">CreatePost</Link></li>,
                  <li><Link to="/saved">Saved</Link></li>,
                  <li>
