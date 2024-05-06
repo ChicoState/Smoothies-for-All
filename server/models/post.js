@@ -35,6 +35,11 @@ const postSchema = new mongoose.Schema({
         type:ObjectId,
         ref:"User"
     },
+    weekly: {
+        type: Date,
+        default: null,
+        required: false
+    },
 })
 
 mongoose.model("Post",postSchema)

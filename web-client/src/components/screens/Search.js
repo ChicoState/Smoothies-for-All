@@ -1,14 +1,17 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
+import { likePost, makeComment, savePost, unlikePost, unsavePost } from "../../utils/postActions";
 import { UserContext } from "../../App";
-import { deletePost, likePost, makeComment, savePost, unlikePost, unsavePost } from "../../utils/postActions";
-import "../../App.css";
 import { useShoppingList } from "../../hooks/useShoppingList";
 
-const Home = () => {
-  const [data, setData] = useState([]);
-
+function Search() {
+  // ** Hooks
+  const searchRef = useRef();
   const { state, dispatch } = useContext(UserContext);
   const {add} = useShoppingList();
+
+  // ** States
+  const [baseData, setBaseData] = useState([]);
+  const [filteredPosts, setFilteredPosts] = useState([]);
 
   useEffect(() => {
     fetch("/allposts", {
@@ -17,47 +20,64 @@ const Home = () => {
       },
     })
       .then((res) => res.json())
-      .then((result) => {
-        setData(result.posts);
+      .then((data) => {
+        setBaseData(data.posts);
       });
   }, []);
 
+  // ** Functions
+  const handleSearch = () => {
+    const search = searchRef.current.value;
+
+    if (!search) {
+      setFilteredPosts([]);
+
+      return;
+    }
+
+    const filtered = baseData.filter(
+      (post) =>
+        post.body.includes(search) ||
+        post.title.includes(search) ||
+        post.postedBy.username.includes(search) ||
+        post.ingredients?.some((ingredient) => ingredient.text?.includes(search)) ||
+        post.tags?.some((tag) => tag.text?.includes(search))
+    );
+
+    setFilteredPosts(filtered);
+  };
+
   return (
-    <div className="home">
-      {data.map((item) => {
-        return (
-          <div className="card home-card" key={item._id}>
+    <>
+      <div className="mycard">
+        <div className="card auth-card">
+          <input type="text" placeholder="Enter your query." ref={searchRef} />
+          <button
+            className="btn waves-effect waves-light"
+            onClick={handleSearch}
+          >
+            Search
+          </button>
+        </div>
+      </div>
+      {baseData &&
+        Array.isArray(baseData) &&
+        filteredPosts.map((post) => (
+            <div className="card home-card" key={post._id}>
             <h5>
-              {item.postedBy.username}{" "}
-              {item.postedBy._id === state._id && (
-                <i
-                  className="material-icons"
-                  style={{
-                    float: "right",
-                  }}
-                  onClick={() => deletePost(item._id).then(() => {
-                    const newData = data.filter((post) => {
-                      return post._id !== item._id;
-                    });
-                    setData(newData);
-                  })}
-                >
-                  {" "}
-                  delete{" "}
-                </i>
-              )}
+              {post.postedBy.username}{" "}
             </h5>
             <div className="card-image">
-              <img src={item.photo} />
+              <img src={post.photo} alt="Post" />
             </div>
             <div className="card-content">
-              {item.likes.includes(state._id) ? (
+              {post.likes.includes(state._id) ? (
                 <i
                   class="material-icons"
                   style={{ color: "red" }}
                   onClick={() => {
-                    unlikePost(item._id).then(() => {
-                        const newData = data.map((post) => {
+                    unlikePost(post._id).then(() => {
+                        const newData = baseData.map((item) => {
                             if (item._id === post._id) {
                               return {
                                 ...post,
@@ -67,7 +87,7 @@ const Home = () => {
                               return item;
                             }
                           });
-                        setData(newData);
+                        setBaseData(newData);
                         });
                   }}
                 >
@@ -77,8 +97,8 @@ const Home = () => {
                 <i
                   class="material-icons"
                   onClick={() => {
-                    likePost(item._id).then(() => {
-                        const newData = data.map((post) => {
+                    likePost(post._id).then(() => {
+                        const newData = baseData.map((item) => {
                             if (item._id === post._id) {
                               return {
                                 ...post,
@@ -88,7 +108,7 @@ const Home = () => {
                               return item;
                             }
                           });
-                        setData(newData);
+                        setBaseData(newData);
                     });
                   }}
                 >
@@ -96,12 +116,11 @@ const Home = () => {
                 </i>
               )}
 
-              {state.saved.includes(item._id) ? (
+              {state.saved.includes(post._id) ? (
                 <i
                   class="material-icons"
                   onClick={() => {
-                    unsavePost(item._id).then((result) => {
-                        console.log(result)
+                    unsavePost(post._id).then((result) => {
                         dispatch({ type: "USER", payload: result });
                     })
                   }}
@@ -112,8 +131,7 @@ const Home = () => {
                 <i
                   class="material-icons"
                   onClick={() => {
-                    savePost(item._id).then((result) => {
-                        console.log(result)
+                    savePost(post._id).then((result) => {
                         dispatch({ type: "USER", payload: result });
                     });
                   }}
@@ -122,35 +140,33 @@ const Home = () => {
                 </i>
               )}
 
-              <h6>{item.likes.length} Likes</h6>
-              <h6>{item.title}</h6>
-              <p>{item.body}</p>
+              <h6>{post.likes.length} Likes</h6>
+              <h6>{post.title}</h6>
+              <p>{post.body}</p>
 
               <div className="listed_tags_container">
-                {item.tags.map((tag) => {
+                {post.tags.map((tag) => {
                   return <li className="listed_tags">{tag.text}</li>;
                 })}
               </div>
               <details>
-                <summary>Ingredients ({item.ingredients.length})</summary>
-                {item.ingredients.map((record) => {
+                <summary>Ingredients ({post.ingredients.length})</summary>
+                {post.ingredients.map((record) => {
                   return <li> {record.text} </li>;
                 })}
-                {item.ingredients.length > 0 && (
+                {post.ingredients.length > 0 && (
                   <button
                     className="btn waves-effect waves-light #64b5f6 blue darken-1"
                     style={{ margin: "10px 0px" }}
-                    onClick={() => {
-                      add(item.ingredients.map((ingredient) => ingredient.text));
-                    }}
+                    onClick={() => add(post.ingredients.map((ingredient) => ingredient.text))}
                   >
                     Add to Shopping List
                   </button>
                 )}
               </details>
               <details>
-                <summary>Comments ({item.comments.length})</summary>
-                {item.comments.map((record) => {
+                <summary>Comments ({post.comments.length})</summary>
+                {post.comments.map((record) => {
                   return (
                     <h6 key={record._id}>
                       <span style={{ fontWeight: "500" }}>
@@ -165,28 +181,26 @@ const Home = () => {
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
-                  makeComment(e.target[0].value, item._id).then((result) => {
-                    console.log(result);
-                    const newData = data.map((post) => {
+                  makeComment(e.target[0].value, post._id).then((result) => {
+                    const newData = baseData.map((item) => {
                         if (post._id === result._id) {
                           return result;
                         } else {
                           return item;
                         }
                       });
-                      setData(newData);
-                    });
+                      setBaseData(newData);
                     e.target[0].value = "";
+                    });
                 }}
               >
                 <input type="text" placeholder="Add comment" />
               </form>
             </div>
           </div>
-        );
-      })}
-    </div>
+        ))}
+    </>
   );
-};
+}
 
-export default Home;
+export default Search;
