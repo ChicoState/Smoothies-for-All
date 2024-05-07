@@ -13,6 +13,7 @@ const NavBar = ()=> {
                 <li><Link to="/weekly">WeeklyPost</Link></li>,
                  <li><Link to="/create">CreatePost</Link></li>,
                  <li><Link to="/saved">Saved</Link></li>,
+                 <li><Link to="/myfollowerspost">Following Posts</Link></li>,
                  <li>
                     <button className='btn' onClick={()=>{
                     localStorage.clear() 

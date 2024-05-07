@@ -17,6 +17,19 @@ router.get("/allposts", requireLogin, (req, res) => {
     });
 });
 
+// New function subpost
+router.get("/getsubpost", requireLogin, (req, res) => {
+  Post.find({postedBy:{$in:req.user.following}})
+    .populate("postedBy", "_id username")
+    .populate("comments.postedBy", "_id username")
+    .then((posts) => {
+      res.json({ posts });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
 router.get("/weeklyPost", requireLogin, async (req, res) => {
     const currentWeeklyPost = await Post.findOne({ weekly: { $ne: null } }).populate("postedBy", "_id username")
     .populate("comments.postedBy", "_id username");
@@ -34,19 +47,22 @@ router.get("/weeklyPost", requireLogin, async (req, res) => {
     return res.json({ weeklyPost: currentWeeklyPost });
   });
 
-router.get("/savedpost", requireLogin, (req, res) => {
-  Promise.all(
-    req.user.saved.map((id) => {
-      return Post.findById(id).populate("postedBy", "_id username");
-    })
-  )
+  router.get("/savedpost", requireLogin, (req, res) => {
+    Promise.all(
+      req.user.saved.map((id) => {
+        return Post.findById(id).populate("postedBy", "_id username");
+      })
+    )
     .then((savedPosts) => {
+      console.log("Saved Posts:", savedPosts); // Add this line to log the output
       res.json({ saved: savedPosts });
     })
     .catch((err) => {
       console.log(err);
+      res.status(500).json({ error: 'Failed to fetch saved posts' });
     });
-});
+  });
+  
 
 router.post("/create", requireLogin, (req, res) => {
   const { title, body, ingredients, tags, photo } = req.body;
@@ -143,15 +159,17 @@ router.put("/comment", requireLogin, (req, res) => {
     });
 });
 
-router.delete("/deletepost/:postId", requireLogin, (req, res) => {
-  Post.findOne({ _id: req.params.postId })
-    .populate("postedBy", "_id")
-    .then((result) => {
-      res.json(result);
-    })
-    .catch((err) => {
-      return res.status(422).json({ error: err });
-    });
+router.delete('/deletepost/:postId', requireLogin, (req, res) => {
+  Post.findOneAndDelete({_id: req.params.postId, postedBy: req.user._id})
+  .then(deletedPost => {
+      if (!deletedPost) {
+          return res.status(404).json({error: "Post not found or user not authorized to delete this post"});
+      }
+      res.json({message: "Post deleted successfully", deletedPost});
+  })
+  .catch(err => {
+      return res.status(422).json({error: "Could not delete the post"});
+  });
 });
 
 module.exports = router;

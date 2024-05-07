@@ -11,7 +11,7 @@ const Home = () => {
   const {add} = useShoppingList();
 
   useEffect(() => {
-    fetch("/allposts", {
+    fetch("/getsubpost", {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
