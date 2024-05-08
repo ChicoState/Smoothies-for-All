@@ -24,3 +24,5 @@ app.use(require('./routes/user'))
 app.listen(PORT,()=>{
     console.log("server is running on",PORT)
 })
+
+module.exports = app; // Export the app for testing
