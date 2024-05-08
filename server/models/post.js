@@ -40,6 +40,6 @@ const postSchema = new mongoose.Schema({
         default: null,
         required: false
     },
-})
+},{timestamps:true})
 
 mongoose.model("Post",postSchema)

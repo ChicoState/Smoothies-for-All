@@ -22,13 +22,16 @@ const Home = () => {
       });
   }, []);
 
+
   return (
     <div className="home">
       {data.map((item) => {
+        {console.log(item)}
         return (
           <div className="card home-card" key={item._id}>
             <h5>
-              {item.postedBy.username}{" "}
+              <a href={`/profile/${item.postedBy._id}`} target="_blank" rel="noopener noreferrer">{item.postedBy.username}</a>
+
               {item.postedBy._id === state._id && (
                 <i
                   className="material-icons"
@@ -50,6 +53,7 @@ const Home = () => {
             <div className="card-image">
               <img src={item.photo} />
             </div>
+
             <div className="card-content">
               {item.likes.includes(state._id) ? (
                 <i
@@ -124,7 +128,7 @@ const Home = () => {
 
               <h6>{item.likes.length} Likes</h6>
               <h6>{item.title}</h6>
-              <p>{item.body}</p>
+              <p className="body_style">{item.body}</p>
 
               <div className="listed_tags_container">
                 {item.tags.map((tag) => {

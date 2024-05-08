@@ -65,8 +65,10 @@ function Search() {
         filteredPosts.map((post) => (
             <div className="card home-card" key={post._id}>
             <h5>
-              {post.postedBy.username}{" "}
+            <a href={`/profile/${post.postedBy._id}`} target="_blank" rel="noopener noreferrer">{post.postedBy.username}</a>
+            {" "}
             </h5>
+            
             <div className="card-image">
               <img src={post.photo} alt="Post" />
             </div>

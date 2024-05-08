@@ -18,7 +18,6 @@ const userSchema = new mongoose.Schema({
         type:ObjectId,
         ref:"Post"
     }]
-
 })
 
 mongoose.model("User",userSchema)
