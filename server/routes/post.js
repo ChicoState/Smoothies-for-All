@@ -143,15 +143,17 @@ router.put("/comment", requireLogin, (req, res) => {
     });
 });
 
-router.delete("/deletepost/:postId", requireLogin, (req, res) => {
-  Post.findOne({ _id: req.params.postId })
-    .populate("postedBy", "_id")
-    .then((result) => {
-      res.json(result);
-    })
-    .catch((err) => {
-      return res.status(422).json({ error: err });
-    });
+router.delete('/deletepost/:postId', requireLogin, (req, res) => {
+  Post.findOneAndDelete({_id: req.params.postId, postedBy: req.user._id})
+  .then(deletedPost => {
+      if (!deletedPost) {
+          return res.status(404).json({error: "Post not found or user not authorized to delete this post"});
+      }
+      res.json({message: "Post deleted successfully", deletedPost});
+  })
+  .catch(err => {
+      return res.status(422).json({error: "Could not delete the post"});
+  });
 });
 
 module.exports = router;
