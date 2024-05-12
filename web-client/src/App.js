@@ -1,5 +1,5 @@
 import React, { useEffect, createContext, useReducer, useContext } from "react";
-import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useNavigate , useLocation} from "react-router-dom";
 import Home from "./components/screens/Home";
 import Profile from "./components/screens/Profile";
 import Signup from "./components/screens/Signup";
@@ -10,8 +10,9 @@ import Weekly from "./components/screens/Weekly";
 import Search from "./components/screens/Search";
 import NavBar from "./components/Navbar"; // Navbar
 import "./App.css"; // CSS
-import { intitalState, reducer } from "./reducers/userReducer";
+import { initialState, reducer } from "./reducers/userReducer";
 import UserProfile from "./components/screens/UserProfile";
+import SubscribesUserPosts from "./components/screens/SubscribesUserPosts"
 import {
   ShoppingListConsumer,
   ShoppingListProvider,
@@ -20,6 +21,7 @@ export const UserContext = createContext();
 
 const Routing = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { dispatch } = useContext(UserContext);
 
   useEffect(() => {
@@ -28,10 +30,13 @@ const Routing = () => {
       // If user data exists, dispatch the USER action to set the user state
       dispatch({ type: "USER", payload: user });
     } else {
+      const noAuthRequirePaths = ['/login', '/signup'];
+      if (!noAuthRequirePaths.includes(location.pathname)) {
       // If no user data, navigate to the login page
-      navigate("/login");
+      navigate('/login');
     }
-  }, [dispatch, navigate]);
+  }
+  }, [dispatch, navigate, location.pathname]);
 
   return (
     <Routes>
@@ -44,12 +49,13 @@ const Routing = () => {
       <Route path="/profile/:userid" element={<UserProfile />} />
       <Route path="/weekly" element={<Weekly />} />
       <Route path="/search" element={<Search />} />
+      <Route path="/myfollowerspost" element={<SubscribesUserPosts />} />
     </Routes>
   );
 };
 
 function App() {
-  const [state, dispatch] = useReducer(reducer, intitalState);
+  const [state, dispatch] = useReducer(reducer, initialState);
   return (
     <UserContext.Provider value={{ state, dispatch }}>
       <BrowserRouter>

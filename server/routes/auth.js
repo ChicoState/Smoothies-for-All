@@ -20,7 +20,7 @@ router.get('/',(req,res)=>{
 
 
 router.post('/signup',(req,res)=>{
-    const {username,email,password} = req.body
+    const {username,email,password,pic} = req.body
     if(!username || !email || !password){
          return res.status(422).json({error:"all fields required"})
     }
@@ -33,7 +33,8 @@ router.post('/signup',(req,res)=>{
             const user = new User({
                 username,
                 email,
-                password:hashedpassword
+                password:hashedpassword,
+                pic,
             })
     
             user.save().then(user=>{
@@ -64,8 +65,9 @@ router.post('/signin',(req,res)=>{
             if(correctPassword){
                 //res.json({message:"successful signin"})
                 const token = jwt.sign({_id:savedUser._id},JWT_SECRET)
-                const {_id,username,email,saved} = savedUser
-                res.json({token,user:{_id,username,email,saved}})
+                // const {_id,username,email,saved} = savedUser
+                const {_id,username,email, followers, following, pic, saved} = savedUser
+                res.json({token,user:{_id,username,email,followers, following, pic, saved}})
             }
             else{
                 return res.status(422).json({error:"invalid username or password"})

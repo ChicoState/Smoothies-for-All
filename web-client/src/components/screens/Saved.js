@@ -204,20 +204,15 @@ const deletePost = (postid)=>{
         })
     }
 
-    return(
+    return (
         <div className='home'>
-            {
-                data.map(item =>{
-                    return (   
-                        <div className='card home-card' key={item._id}>
-                           <h5> <a href={`/profile/${item.postedBy._id}`} target="_blank" rel="noopener noreferrer">{item.postedBy.username}</a>
-                            {item.postedBy._id == state._id 
-                           && 
-                           <i className='material-icons' style={{
-                            float: "right"
-                           }}
-                           onClick={()=> deletePost(item._id)}
-                           > delete </i> }</h5>
+          {data.filter(item => item).map(item => {
+            return (
+              <div className='card home-card' key={item._id}>
+                <h5>{item.postedBy.username} {item.postedBy._id == state._id &&
+                  <i className='material-icons' style={{ float: "right" }}
+                    onClick={() => deletePost(item._id)}>delete</i>}
+                </h5>
 
                            <div className='card-image'>
                                <img src={item.photo}/>

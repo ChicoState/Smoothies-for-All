@@ -17,6 +17,13 @@ const userSchema = new mongoose.Schema({
     saved:[{
         type:ObjectId,
         ref:"Post"
+    }],
+    pic:{
+        type:String,
+        default:"https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
+    },
+    followers:[{type:ObjectId,ref:"User"}],
+    following:[{type:ObjectId,ref:"User"}]
     }]
 })
 

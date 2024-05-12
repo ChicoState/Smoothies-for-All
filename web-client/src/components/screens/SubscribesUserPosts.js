@@ -11,7 +11,7 @@ const Home = () => {
   const {add} = useShoppingList();
 
   useEffect(() => {
-    fetch("/allposts", {
+    fetch("/getsubpost", {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
@@ -22,11 +22,9 @@ const Home = () => {
       });
   }, []);
 
-
   return (
     <div className="home">
       {data.map((item) => {
-        {console.log(item)}
         return (
           <div className="card home-card" key={item._id}>
             <h5>
@@ -55,7 +53,6 @@ const Home = () => {
             <div className="card-image">
               <img src={item.photo} />
             </div>
-
             <div className="card-content">
               {item.likes.includes(state._id) ? (
                 <i
@@ -130,7 +127,7 @@ const Home = () => {
 
               <h6>{item.likes.length} Likes</h6>
               <h6>{item.title}</h6>
-              <p className="body_style">{item.body}</p>
+              <p>{item.body}</p>
 
               <div className="listed_tags_container">
                 {item.tags.map((tag) => {
