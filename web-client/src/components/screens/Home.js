@@ -45,6 +45,10 @@ const Home = () => {
                       return post._id !== item._id;
                     });
                     setData(newData);
+                    unsavePost(item._id).then((result) => {
+                      console.log(result)
+                      dispatch({ type: "USER", payload: result });
+                  })
                   })}
                 >
                   {" "}
