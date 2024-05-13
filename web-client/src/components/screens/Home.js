@@ -22,11 +22,74 @@ const Home = () => {
       });
   }, []);
 
+  const likePost = (id)=>{
+    fetch('/like', {
+        method:"put",
+        headers:{
+            'Content-Type':"application/json",
+            'Authorization':"Bearer "+localStorage.getItem("jwt")
+        },
+        body:JSON.stringify({
+            postId:id,
+        })
+    })
+    .then(res=>{
+        if (res.ok) {
+            return res.json();
+        } else {
+            console.error("Error response:", res);
+        }
+    })
+    .then(result=>{
+        //console.log(result)
+        const newData = data.map(item=>{
+            
+            console.log(item)
+            if(item._id==result._id) {
+                return result
+            } else {
+                return item
+            }
+        })
+        setData(newData)
+    })
+}
+
+
+const unlikePost = (id)=>{
+    fetch('/unlike', {
+        method:"put",
+        headers:{
+            'Content-Type':"application/json",
+            'Authorization':"Bearer "+localStorage.getItem("jwt")
+        },
+        body:JSON.stringify({
+            postId:id
+        })
+    })
+    .then(res=>{
+        if (res.ok) {
+            return res.json();
+        } else {
+            console.error("Error response:", res);
+        }
+    })
+    .then(result=>{
+        const newData = data.map(item=>{
+            if(item._id==result._id) {
+                return result
+            } else {
+                return item
+            }
+        })
+        setData(newData)
+    }).catch(err => {console.log(err)})
+}
+
 
   return (
     <div className="home">
-      {data.map((item) => {
-        {console.log(item)}
+      {data && data.map((item) => {
         return (
           <div className="card home-card" key={item._id}>
             <h5>
@@ -61,57 +124,22 @@ const Home = () => {
             </div>
 
             <div className="card-content">
-              {item.likes.includes(state._id) ? (
-                <i
-                  class="material-icons"
-                  style={{ color: "red" }}
-                  onClick={() => {
-                    unlikePost(item._id).then(() => {
-                        const newData = data.map((post) => {
-                            if (item._id === post._id) {
-                              return {
-                                ...post,
-                                likes: post.likes.filter((id) => id !== state._id),
-                              };
-                            } else {
-                              return item;
-                            }
-                          });
-                        setData(newData);
-                        });
-                  }}
-                >
-                  favorite
-                </i>
-              ) : (
-                <i
-                  class="material-icons"
-                  onClick={() => {
-                    likePost(item._id).then(() => {
-                        const newData = data.map((post) => {
-                            if (item._id === post._id) {
-                              return {
-                                ...post,
-                                likes: [...post.likes, state._id],
-                              };
-                            } else {
-                              return item;
-                            }
-                          });
-                        setData(newData);
-                    });
-                  }}
-                >
-                  favorite_border
-                </i>
-              )}
+            {item.likes.includes(state._id)
+            ?   <i class="material-icons" style={{color:'red'}}
+                onClick={()=>{unlikePost(item._id)}}
+                >favorite</i>
+            :
+                <i class="material-icons"
+                onClick={()=>{likePost(item._id)}}
+                >favorite_border</i>
+            }
+
 
               {state.saved.includes(item._id) ? (
                 <i
                   class="material-icons"
                   onClick={() => {
                     unsavePost(item._id).then((result) => {
-                        console.log(result)
                         dispatch({ type: "USER", payload: result });
                     })
                   }}

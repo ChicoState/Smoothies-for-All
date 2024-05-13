@@ -1,5 +1,6 @@
 import React, {useContext, useEffect, useState } from 'react'
 import { UserContext } from '../../App' 
+import { Link } from 'react-router-dom';
 
 const Profile = ()=>{
     const [mypics,setPics] = useState([])
@@ -16,6 +17,7 @@ const Profile = ()=>{
             setPics(result.mypost);
         })
     },[])
+
     useEffect(()=>{
         if(image) {
             const data = new FormData()
@@ -49,6 +51,7 @@ const Profile = ()=>{
     const updatePhoto = (file)=>{
         setImage(file)
     }
+
     return(
         <div style={{maxWidth:"550px", margin:"0px auto"}}>
             <div style={{margin:"18px 0px", borderBottom:"1px solid grey"}}>
@@ -86,8 +89,9 @@ const Profile = ()=>{
                 {
                     mypics.map(item => {
                     // Make sure `item._id` is a unique identifier for each item
-                    return (
-                    <img key={item._id} className='item' src={item.photo} alt={item.title}/>
+                    return ( 
+                        <img key={item._id} className='item' src={item.photo} alt={item.title} />
+                    
                     )
                     })
   
