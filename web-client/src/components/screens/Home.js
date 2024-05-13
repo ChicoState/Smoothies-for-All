@@ -89,7 +89,7 @@ const unlikePost = (id)=>{
 
   return (
     <div className="home">
-      {data && data.map((item) => {
+      {data.map((item) => {
         return (
           <div className="card home-card" key={item._id}>
             <h5>

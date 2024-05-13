@@ -1,6 +1,5 @@
 import React, {useContext, useEffect, useState } from 'react'
 import { UserContext } from '../../App' 
-import { Link } from 'react-router-dom';
 
 const Profile = ()=>{
     const [mypics,setPics] = useState([])
