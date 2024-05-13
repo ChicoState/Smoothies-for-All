@@ -4,6 +4,7 @@ import { deletePost, likePost, makeComment, savePost, unlikePost, unsavePost } f
 import "../../App.css";
 import { useShoppingList } from "../../hooks/useShoppingList";
 import { Link } from 'react-router-dom';
+import NavBar from '../Navbar';
 const Home = () => {
   const [data, setData] = useState([]);
 
@@ -88,6 +89,8 @@ const unlikePost = (id)=>{
 
 
   return (
+    <div>
+      <NavBar />
     <div className="home">
       {data.map((item) => {
         return (
@@ -223,6 +226,7 @@ const unlikePost = (id)=>{
           </div>
         );
       })}
+    </div>
     </div>
   );
 };

@@ -1,45 +1,38 @@
-import React,{useContext} from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import React, { useContext, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../App';
+import M from 'materialize-css';
+import './Sidebar.css';
 
-const NavBar = ()=> {
-    const {state,dispatch} = useContext(UserContext)
-    const navigate = useNavigate()
-    const renderList = () =>{
-        if(state) {
-            return [
-                <li><Link to="/search">Search</Link></li>,
-                <li><Link to="/profile">Profile</Link></li>,
-                <li><Link to="/weekly">WeeklyPost</Link></li>,
-                 <li><Link to="/create">CreatePost</Link></li>,
-                 <li><Link to="/saved">Saved</Link></li>,
-                 <li><Link to="/myfollowerspost">Following Posts</Link></li>,
-                 <li>
-                    <button className='btn' onClick={()=>{
-                    localStorage.clear() 
-                    dispatch({type:"CLEAR"})
-                    navigate('/login')
-                    }}
-                    >Logout</button>
-                 </li>
-            ]
-        } else {
-            return [
-                <li key = "login"><Link to="/login">Login</Link></li>,
-                <li key = "signup"><Link to="/signup">Signup</Link></li>
-            ]
-        }
-    }
+const NavBar = () => {
+    const { state, dispatch } = useContext(UserContext);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        let elems = document.querySelectorAll('.dropdown-trigger');
+        M.Dropdown.init(elems, { coverTrigger: false });
+    }, []);
+
     return (
-        <nav>
-            <div className="nav-wrapper white">
-                <Link to="/" className="brand-logo left">Smoothies For All</Link>
-                <ul id="nav-mobile" className="right"> 
-                   {renderList()}
-                </ul>
+        <div className="sidebar">
+            <Link to="/" className="brand-logo">Smoothies For All</Link>
+            <ul className="nav-links">
+                <li><Link to="/search">Search</Link></li>
+                <li><Link to="/profile">Profile</Link></li>
+                <li><Link to="/create">CreatePost</Link></li>
+                <li><Link to="/saved">Saved</Link></li>
+                <li><Link to="/myfollowerspost">Following Posts</Link></li>
+            </ul>
+            <div className="logout-section">
+                <button onClick={() => {
+                    localStorage.clear();
+                    dispatch({type: "CLEAR"});
+                    navigate('/login');
+                }}>LOGOUT</button>
             </div>
-        </nav>
+        </div>
     );
 }
 
-export default NavBar
+export default NavBar;
+

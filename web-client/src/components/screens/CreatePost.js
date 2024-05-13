@@ -2,6 +2,7 @@ import React,{useState, useEffect} from "react";
 import M from 'materialize-css';
 import {useNavigate} from 'react-router-dom';
 import '../../App.css'
+import NavBar from '../Navbar';
 
 const CreatePost = ()=>{
     const navigate = useNavigate()
@@ -81,7 +82,9 @@ const CreatePost = ()=>{
 
     }
 
-    return(
+    return( 
+        <div>
+            <NavBar />
         
         <div className="card input-filed"
         
@@ -198,6 +201,7 @@ const CreatePost = ()=>{
                         postDetails()           
                     }}
             >CreatePost</button>
+        </div>
         </div>
     )
 }

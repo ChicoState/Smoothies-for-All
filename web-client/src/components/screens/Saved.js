@@ -1,7 +1,7 @@
 import React,{useState,useEffect,useContext} from 'react'
 import {UserContext} from '../../App';
 import '../../App.css'
-
+import NavBar from '../Navbar';
 import { deletePost, likePost, makeComment, savePost, unlikePost, unsavePost } from "../../utils/postActions";
 import { useShoppingList } from "../../hooks/useShoppingList";
 import { Link } from 'react-router-dom';
@@ -101,6 +101,8 @@ const Saved = ()=>{
 
 
     return (
+        <div>
+            <NavBar />
         <div className="home">
           {data.map((item) => {
             {console.log(item)}
@@ -237,6 +239,7 @@ const Saved = ()=>{
               </div>
             );
           })}
+        </div>
         </div>
       );
 }

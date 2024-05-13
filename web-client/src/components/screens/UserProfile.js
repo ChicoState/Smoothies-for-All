@@ -1,8 +1,8 @@
 import React, {useContext, useEffect, useState } from 'react'
 import { UserContext } from '../../App' 
 import {useParams} from 'react-router-dom'
+import NavBar from '../Navbar';
 
-// sadmin id "660da69d65a0a8b1f3382829"
 
 const UserProfile = () => {
     const [userProfile, setProfile] = useState(null);
@@ -82,6 +82,7 @@ const UserProfile = () => {
     }
     return(
         <>
+        <NavBar />
         {userProfile ? 
         <div style={{maxWidth:"550px", margin:"0px auto"}}>
         <div style={{display:"flex", justifyContent:"space-around",margin:"18px 0px", borderBottom:"1px solid grey"}}>

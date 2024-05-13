@@ -2,7 +2,7 @@ import { useRef, useState, useEffect, useContext } from "react";
 import { likePost, makeComment, savePost, unlikePost, unsavePost } from "../../utils/postActions";
 import { UserContext } from "../../App";
 import { useShoppingList } from "../../hooks/useShoppingList";
-
+import NavBar from '../Navbar';
 function Search() {
   // ** Hooks
   const searchRef = useRef();
@@ -49,6 +49,7 @@ function Search() {
 
   return (
     <>
+    <NavBar />
       <div className="mycard">
         <div className="card auth-card">
           <input type="text" placeholder="Enter your query." ref={searchRef} />

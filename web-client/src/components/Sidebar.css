@@ -1,0 +1,64 @@
+/* Main sidebar container styling */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Distributes space between top and bottom contents */
+    width: 200px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: #fff;
+    z-index: 1000;
+    padding-top: 20px;
+    border-right: 1px solid #ccc;
+}
+
+/* Styles for the logo at the top */
+.sidebar .brand-logo {
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 1.9em;
+}
+
+/* Container for navigation links */
+.sidebar .nav-links {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* General list item styles */
+.sidebar ul li a, .sidebar ul li button {
+    display: block;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: black;
+    text-align: left;
+    transition: background-color 0.3s;
+}
+
+/* Hover effect for interactive elements */
+.sidebar ul li a:hover, .sidebar ul li button:hover {
+    background-color: #f4f4f4;
+}
+
+/* Styling for the logout button section at the bottom */
+.sidebar .logout-section {
+    margin-bottom: 20px;
+}
+
+/* Logout button specific styles */
+.sidebar .logout-section button {
+    width: 100%;
+    padding: 10px 0;
+    background-color: #26a69a;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+/* Hover style for logout button */
+.sidebar .logout-section button:hover {
+    background-color: #00796b;
+}
