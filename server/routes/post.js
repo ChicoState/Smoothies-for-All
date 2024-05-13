@@ -18,6 +18,9 @@ router.get("/allposts", requireLogin, (req, res) => {
     });
 });
 
+
+
+
 // New function subpost
 router.get("/getsubpost", requireLogin, (req, res) => {
   Post.find({postedBy:{$in:req.user.following}})

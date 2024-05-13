@@ -50,6 +50,7 @@ const Routing = () => {
       <Route path="/weekly" element={<Weekly />} />
       <Route path="/search" element={<Search />} />
       <Route path="/myfollowerspost" element={<SubscribesUserPosts />} />
+
     </Routes>
   );
 };
