@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState } from 'react'
 import { UserContext } from '../../App' 
-
+import NavBar from '../Navbar';
 const Profile = ()=>{
     const [mypics,setPics] = useState([])
     const {state,dispatch} = useContext(UserContext)
@@ -52,6 +52,8 @@ const Profile = ()=>{
     }
 
     return(
+        <div>
+            <NavBar />
         <div style={{maxWidth:"550px", margin:"0px auto"}}>
             <div style={{margin:"18px 0px", borderBottom:"1px solid grey"}}>
             <div style={{display:"flex", justifyContent:"space-around"}}>
@@ -97,6 +99,7 @@ const Profile = ()=>{
                 }
 
             </div>
+        </div>
         </div>
     )
 }

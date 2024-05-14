@@ -8,7 +8,6 @@ import CreatePost from "./components/screens/CreatePost";
 import Saved from "./components/screens/Saved";
 import Weekly from "./components/screens/Weekly";
 import Search from "./components/screens/Search";
-import NavBar from "./components/Navbar"; // Navbar
 import "./App.css"; // CSS
 import { initialState, reducer } from "./reducers/userReducer";
 import UserProfile from "./components/screens/UserProfile";
@@ -64,7 +63,6 @@ function App() {
           <ShoppingListConsumer>
             {({ list, remove, open, setOpen, clear }) => (
               <>
-                <NavBar />
                 <Routing />
                 {list && list.length > 0 && open && (
                   <div
