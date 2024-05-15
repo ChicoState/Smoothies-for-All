@@ -43,7 +43,7 @@ describe('NavBar', () => {
       </UserContext.Provider>
     );
 
-    fireEvent.click(getByText('Logout'));
+    fireEvent.click(getByText('LOGOUT'));
 
     expect(mockDispatch).toHaveBeenCalledWith({ type: 'CLEAR' });
   });
