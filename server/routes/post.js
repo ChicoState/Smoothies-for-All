@@ -140,7 +140,6 @@ router.put("/unlike", requireLogin, (req, res) => {
     });
 });
 
-<<<<<<< HEAD
 router.delete('/deletepost/:postId',requireLogin,(req,res)=>{
     Post.findOne({_id:req.params.postId})
     .populate("postedBy","_id")
@@ -158,30 +157,6 @@ router.delete('/deletepost/:postId',requireLogin,(req,res)=>{
         }
     })
 })
-=======
-router.put("/comment", requireLogin, (req, res) => {
-  const comment = {
-    text: req.body.text,
-    postedBy: req.user._id,
-  };
-  Post.findByIdAndUpdate(
-    req.body.postId,
-    {
-      $push: { comments: comment },
-    },
-    {
-      new: true,
-    }
-  )
-    .populate("comments.postedBy", "_id username")
-    .then((result) => {
-      res.json(result);
-    })
-    .catch((err) => {
-      return res.status(422).json({ error: err });
-    });
-});
->>>>>>> sidenav
 
 router.delete('/deletepost/:postId', requireLogin, (req, res) => {
   Post.findOneAndDelete({_id: req.params.postId, postedBy: req.user._id})
