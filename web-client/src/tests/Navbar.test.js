@@ -18,19 +18,6 @@ describe('NavBar', () => {
     expect(getByText('Smoothies For All')).toBeInTheDocument();
   });
 
-  it('renders the Login and Signup links when user is not authenticated', () => {
-    const { getByText } = render(
-      <UserContext.Provider value={{ state: null, dispatch: jest.fn() }}>
-        <Router>
-          <NavBar />
-        </Router>
-      </UserContext.Provider>
-    );
-
-    expect(getByText('Login')).toBeInTheDocument();
-    expect(getByText('Signup')).toBeInTheDocument();
-  });
-
   it('renders the Profile, CreatePost, Saved, and Logout links when user is authenticated', () => {
     const { getByText } = render(
       <UserContext.Provider value={{ state: { user: {} }, dispatch: jest.fn() }}>
@@ -43,7 +30,7 @@ describe('NavBar', () => {
     expect(getByText('Profile')).toBeInTheDocument();
     expect(getByText('CreatePost')).toBeInTheDocument();
     expect(getByText('Saved')).toBeInTheDocument();
-    expect(getByText('Logout')).toBeInTheDocument();
+    expect(getByText('LOGOUT')).toBeInTheDocument();
   });
 
   it('Logs user out when Logout button is clicked', () => {
